@@ -56,15 +56,13 @@ const sidebarSections = [
 ];
 import { AlignLeft } from "lucide-react";
 
+
 function TOCSidebar() {
   const { pathname } = useLocation();
   const [copied, setCopied] = useState(false);
-  const scrollRef = useRef(null);
-  const [thumbTop, setThumbTop] = useState(0);
-  const [thumbHeight, setThumbHeight] = useState(0);
-  const [showThumb, setShowThumb] = useState(false);
+  const [activeId, setActiveId] = useState(null);
 
-  const tocMap = {
+   const tocMap = {
     "/code-group": [
       { id: "overview", label: "Overview", level: "h2" },
       { id: "using-with-web-editor", label: "Using with Web Editor", level: "h2" },
@@ -108,35 +106,62 @@ function TOCSidebar() {
   };
 
   const links = tocMap[pathname];
+  const ITEM_HEIGHT = 30;
+  const SVG_WIDTH = 14;
 
-  const updateThumb = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const { scrollTop, scrollHeight, clientHeight } = el;
-    if (scrollHeight <= clientHeight) {
-      setShowThumb(false);
-      return;
-    }
-    setShowThumb(true);
-    const ratio = clientHeight / scrollHeight;
-    const h = Math.max(ratio * clientHeight, 28);
-    const maxTop = clientHeight - h;
-    const top = (scrollTop / (scrollHeight - clientHeight)) * maxTop;
-    setThumbHeight(h);
-    setThumbTop(top);
-  }, []);
+  // Generate SVG path based on nesting levels (h2 = x:1, h3 = x:13)
+  const generateIndicatorPath = useCallback(() => {
+    if (!links) return "";
+    const segments = [];
+    let y = 12; // starting offset
 
+    links.forEach((link, i) => {
+      const x = link.level === "h2" ? 1 : 13;
+      const nextLink = links[i + 1];
+      const nextX = nextLink ? (nextLink.level === "h2" ? 1 : 13) : x;
+
+      // Top of this item
+      if (i === 0) {
+        segments.push(`M ${x} ${y}`);
+      }
+
+      // Line down through this item
+      const midY = y + 18;
+      segments.push(`L ${x} ${midY}`);
+
+      // Transition to next item's x position
+      y = midY + 12;
+      if (nextLink) {
+        segments.push(`L ${nextX} ${y}`);
+      }
+    });
+
+    return segments.join(" ");
+  }, [links]);
+
+  // Find active section index
+  const activeIndex = links ? links.findIndex((l) => l.id === activeId) : -1;
+
+  // Intersection observer for active section tracking
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    updateThumb();
-    el.addEventListener("scroll", updateThumb, { passive: true });
-    window.addEventListener("resize", updateThumb);
-    return () => {
-      el.removeEventListener("scroll", updateThumb);
-      window.removeEventListener("resize", updateThumb);
-    };
-  }, [links, updateThumb]);
+    if (!links) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          setActiveId(visible[0].target.id);
+        }
+      },
+      { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
+    );
+
+    links.forEach((link) => {
+      const el = document.getElementById(link.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [links]);
 
   const handleCopy = () => {
     setCopied(true);
@@ -145,17 +170,15 @@ function TOCSidebar() {
 
   if (!links) return null;
 
+  const totalHeight = links.length * ITEM_HEIGHT;
+  const svgPath = generateIndicatorPath();
+  const activeTop = activeIndex >= 0 ? 12 + activeIndex * ITEM_HEIGHT : 0;
+
   return (
     <aside className="toc-sidebar">
-      {/* Copy page button */}
       <div className="toc-copy-wrapper">
         <div className="toc-copy-btn-group">
-          <button
-            type="button"
-            title="Copy page"
-            className="toc-copy-btn"
-            onClick={handleCopy}
-          >
+          <button type="button" title="Copy page" className="toc-copy-btn" onClick={handleCopy}>
             {copied ? <Check size={15} /> : <Copy size={15} />}
             <span>{copied ? "Copied!" : "Copy page"}</span>
           </button>
@@ -165,42 +188,57 @@ function TOCSidebar() {
         </div>
       </div>
 
-      {/* On this page heading */}
       <div className="toc-heading">
         <AlignLeft size={16} />
         <span>On this page</span>
       </div>
 
-      {/* Scrollable TOC with thin line indicator */}
       <div className="toc-scroll-wrapper">
-        {/* Track line (light gray background) */}
-        <div className="toc-track-line" />
-
-        {/* Thumb line (dark, moves with scroll) */}
-        {showThumb && (
-          <div
-            className="toc-thumb-line"
-            style={{
-              top: thumbTop,
-              height: thumbHeight,
-            }}
+        {/* SVG indicator with mask-based wavy line */}
+        <svg
+          className="toc-indicator"
+          width={SVG_WIDTH}
+          height={totalHeight}
+          viewBox={`0 0 ${SVG_WIDTH} ${totalHeight}`}
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{ position: "absolute", left: 0, top: 0 }}
+        >
+          <mask id="toc-line-mask">
+            <path d={svgPath} stroke="white" strokeWidth="1" fill="none" />
+          </mask>
+          {/* Gray background line */}
+          <rect
+            width={SVG_WIDTH}
+            height={totalHeight}
+            fill="#dadada"
+            opacity="0.8"
+            mask="url(#toc-line-mask)"
           />
-        )}
+          {/* Active highlight */}
+          <rect
+            y={activeTop}
+            width={SVG_WIDTH}
+            height={18}
+            fill="#1a1a1a"
+            mask="url(#toc-line-mask)"
+            style={{ transition: "y 0.3s ease-out" }}
+          />
+        </svg>
 
-        {/* Scroll container — native scrollbar hidden */}
-        <div className="toc-scroll-container" ref={scrollRef}>
-          <nav className="toc-links">
-            {links.map((link) => (
-              <a
-                key={link.id}
-                href={`#${link.id}`}
-                className={`toc-link ${link.level === "h3" ? "toc-h3" : "toc-h2"}`}
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-        </div>
+        <nav className="toc-links">
+          {links.map((link) => (
+            <a
+              key={link.id}
+              href={`#${link.id}`}
+              className={`toc-link ${link.level === "h3" ? "toc-h3" : "toc-h2"} ${
+                activeId === link.id ? "toc-link-active" : ""
+              }`}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
       </div>
     </aside>
   );

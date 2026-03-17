@@ -169,7 +169,6 @@
 // }
 
 // export default Callout
-
 import { CircleAlert, CircleCheckBig, Info, Lightbulb, TriangleAlert } from 'lucide-react'
 import React from 'react'
 import "./index.css"
@@ -182,7 +181,7 @@ const Callout = () => {
             <p className='callout-main-desc'>Callout
                 Reference for displaying highlighted information and alerts using the Callout component.</p>
 
-            <h1 className='callout-overview-title'>Overview</h1>
+            <h1 id="overview" className='callout-overview-title'>Overview</h1>
             <p className='callout-overview-desc'>Overview
                 Callouts are boxed sections used to highlight tips, warnings, success messages, and other important notes inside your Documentation.AI pages.</p>
 
@@ -205,7 +204,7 @@ const Callout = () => {
                 <li className='callout-kind-item-danger'><span className='callout-info'>danger:</span> Critical errors and destructive actions.</li>
             </ul>
 
-            <h1 className='callout-editor-title'>Using with Web Editor</h1>
+            <h1 id="using-with-web-editor" className='callout-editor-title'>Using with Web Editor</h1>
             <p className='callout-editor-desc'>In the Web Editor, you can insert callouts without writing any code.</p>
             <ol className='callout-steps-list callout-use-list'>
                 <li className='callout-step-1'>Place your cursor where you want the callout.</li>
@@ -245,7 +244,7 @@ const Callout = () => {
                     <p>You can switch to <strong>MDX view inside the Web Editor</strong> to write or edit this component using the same syntax as the Code Editor. This is useful if you want full control while staying in the Web Editor.</p>
                 </div>
             </div>
-            <h1 className='callout-code-editor'>Using with Code Editor</h1>
+            <h1 id="using-with-code-editor" className='callout-code-editor'>Using with Code Editor</h1>
             <p>In MDX, use the <span className='callout-info'>Callout</span> component with a <span className='callout-info'>kind</span> attribute to control the visual style. The <span className='callout-info'>kind</span> value must be one of <span className='callout-info'>info</span>, <span className='callout-info'>tip</span>, <span className='callout-info'>success</span>, <span className='callout-info'>alert</span>, or <span className='callout-info'>danger</span>.</p>
             <h2 className='expandable-section-heading-1'>Basic Syntax</h2>
             <ShikiCodeBlock
@@ -319,7 +318,7 @@ const Callout = () => {
                 <p className='callout-success-text'>Your documentation has been successfully deployed and is live.</p>
             </div>
 
-            <h2 className='expandable-section-heading-1'>Attributes</h2>
+            <h2 id="attributes" className='expandable-section-heading-1'>Attributes</h2>
             <div className='callout-attributes-section'>
                 <div className='callout-attribute-header'>
                     <span className='attribute-path'>Path</span>
@@ -329,7 +328,7 @@ const Callout = () => {
                 <p className='attribute-desc'>Visual style and icon for the callout. One of: <span className='callout-info'>info</span> (default), <span className='callout-info'>tip</span>, <span className='callout-info'>success</span>, <span className='callout-info'>alert</span>, <span className='callout-info'>danger</span>.</p>
             </div>
 
-            <h2 className='expandable-section-heading-1'>Advanced options</h2>
+            <h2 id="advanced-options" className='expandable-section-heading-1'>Advanced options</h2>
             <p>Callouts support a collapsed state to help keep pages scannable when you have long explanations or optional details.</p>
             <ul className='callout-use-list'>
                 <li><span className='callout-info'>collapsed="false"</span>: The callout content is fully visible.</li>
