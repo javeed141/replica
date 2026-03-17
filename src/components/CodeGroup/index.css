@@ -1,0 +1,145 @@
+.attr-table {
+  margin: 16px 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.attr-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: 12px;
+  padding: 10px 16px;
+  font-size: 14px;
+  line-height: 22px;
+  color: rgb(55, 65, 81);
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.attr-row:last-child {
+  border-bottom: none;
+}
+
+.attr-header {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #0f0f0f;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.code-group-a
+{
+    color: #343131;
+    font-weight: bold;
+}
+
+#alt-text-for-web-editor{
+  font-size: 14px;
+  color:#5c5a5a;
+  margin: 5px 0px 5px 200px;
+}
+
+#prefer-code-text {
+    margin-bottom: 10px;
+    font-weight:400;
+}
+
+#special-margin
+{
+  margin-left: 0px;
+}
+
+
+
+.attribute-card {
+    border-top: 1px solid #eaeaea;
+    padding: 14px 0;
+}
+
+.attribute-card:last-child {
+    border-bottom: 1px solid #eaeaea;
+}
+
+.attribute-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* margin-bottom: 8px; */
+}
+
+.doc-page .attribute-path {
+    background-color: #dbeafe;
+    color: #1e40af;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 8px;
+    letter-spacing: 0.025em;
+    text-transform: capitalize;
+    line-height: 16px;
+}
+
+.attribute-name {
+    font-weight: 700;
+    font-size: 15px;
+    color: #1a1a1a;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.attribute-type {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.attribute-desc {
+    margin: 0;
+    font-size: 15px;
+    color: #374151;
+    line-height: 1.7;
+}
+.shiki-group {
+    margin: 16px 0;
+    border: 1px solid #eaeaea;
+    border-radius: 14px;
+    background-color: rgba(241, 241, 241, 0.8);
+    padding: 0 4px 4px 4px;
+}
+
+.shiki-group .shiki-block {
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    margin: 0;
+    background-color: #fff;
+}
+
+.shiki-group-tabs {
+    display: flex;
+    padding: 0 12px;
+    gap: 8px;
+    height: 36px;
+    align-items: center;
+}
+
+.shiki-group-tab {
+    padding: 6px 6px;
+    font-size: 13px;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    font-weight: 500;
+    color: #6b7280;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+}
+
+.shiki-group-tab:hover {
+    color: #374151;
+}
+
+.shiki-group-tab-active {
+    color: #1a1a1a;
+    font-weight: 500;
+    border-bottom: 2px solid #1a1a1a;
+}
