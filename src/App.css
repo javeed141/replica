@@ -208,7 +208,7 @@ body {
     padding: 32px 48px;
     overflow-y: auto;
     background-color: #ffffff;
-    scrollbar-width: thin;
+    scrollbar-width: none;
     scrollbar-color: #dadada transparent;
 }
 
@@ -226,6 +226,8 @@ body {
     flex-direction: column;
     height: 100%;
     background: transparent;
+      overflow: hidden;          /* add this */
+
 }
 
 /* Copy button */
@@ -296,6 +298,8 @@ body {
     position: relative;
     flex: 1;
     min-height: 0;
+      scrollbar-width: none;
+
 }
 
 /* Thin track line (light gray) */
@@ -308,6 +312,8 @@ body {
     background: #ebebeb;
     border-radius: 2px;
     z-index: 1;
+      scrollbar-width: none;
+
 }
 
 /* Thin thumb line (dark, moves with scroll) */
@@ -319,6 +325,8 @@ body {
     border-radius: 2px;
     z-index: 2;
     transition: top 0.08s ease-out;
+      scrollbar-width: none;
+
 }
 
 /* Hidden native scrollbar */
@@ -327,7 +335,7 @@ body {
     overflow-y: auto;
     padding-left: 16px;
     scrollbar-width: none;
-    -ms-overflow-style: none;
+    /* -ms-overflow-style: none; */
 }
 
 .toc-scroll-container::-webkit-scrollbar {
@@ -363,4 +371,7 @@ body {
 
 .toc-h3 {
     padding-left: 12px;
+}
+.toc-sidebar::-webkit-scrollbar {
+    display: none;
 }
