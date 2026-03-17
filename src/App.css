@@ -1,380 +1,5 @@
-/* * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Inter", sans-serif;
-  color: #0f0f0f;
-  font-size: 14px;
-  margin-bottom: 50px;
-  margin-left: 40px;
-}
-
-/* ── Header ── */
-.header {
-  border-bottom: 1px solid #e8e8e8;
-  position: sticky;
-  top: 0;
-  background: #ffffff;
-  z-index: 10;
-  margin-bottom: 5px;
-}
-
-.header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 28px;
-}
-
-.logo img {
-  height: 34px;
-}
-
-/* ── Search + Ask AI ── */
-.header-center {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: 150px;
-}
-
-.search-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 270px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 7px 12px;
-  height:35px;
-}
-
-.search-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.search-text {
-  color: #999;
-  font-size: 15px;
-}
-
-.search-shortcut {
-  font-size: 14px;
-  background: #f3f3f3;
-  padding: 2px 8px;
-  border-radius: 4px;
-  color: #636161;
-}
-
-.ask-ai-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 7px 12px;
-  background: white;
-  font-size: 14px;
-  cursor: pointer;
-  color: #333;
-  height:40px;
-}
-
-/* ── Right Actions ── */
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  margin-right: 80px;
-}
-
-.login-text {
-  font-size: 16px;
-  color:rgb(65, 64, 64);
-}
-
-.get-started-btn {
-  background: #0f0f0f;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 8px 18px;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-/* ── Tabs ── */
-.header-tabs {
-  display: flex;
-  gap: 24px;
-  padding: 0 28px 12px;
-}
-
-.tab {
-  font-size: 14px;
-  color: #6b6b6b;
-  cursor: pointer;
-  padding-bottom: 8px;
-  font-weight: 400;
-}
-
-.active-tab {
-  color: #0f0f0f;
-  font-weight: 500;
-  border-bottom: 2px solid #0f0f0f;
-}
-
-/* ── Layout ── */
-.layout {
-    display: flex;
-    position: fixed;
-    top: 105px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    max-width: 1560px;
-    margin: 0 auto;
-}
-
-/* ── Sidebar ── */
-.sidebar {
-    width: 260px;
-    min-width: 260px;
-    border-right: 1px solid #e8e8e8;
-    padding: 24px 16px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #eaeaea transparent;
-}
-
-.sidebar-heading {
-  font-size: 14px;
-  font-weight: 600;
-  color: #0f0f0f;
-  margin-bottom: 10px;
-  padding: 0 12px;
-}
-
-.sidebar-link {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 12px;
-    font-size: 15px;
-    color: #444;
-    text-decoration: none;
-    border-radius: 6px;
-    line-height: 1.5;
-}
-
-.sidebar-link:hover {
-  background: #f5f5f5;
-}
-
-.sidebar-link.active {
-  background: #ebebeb;
-  font-weight: 500;
-  color: #0f0f0f;
-}
-
-.sidebar-section {
-    margin-bottom: 24px;
-}
-
-.sidebar-icon {
-    display: flex;
-    align-items: center;
-    color: #999;
-    flex-shrink: 0;
-    font-size: 11px;
-}
-
-.label-sidebar-text {
-  font-size: 13px;
-}
-
-.sidebar-link.active .sidebar-icon {
-    color: #0f0f0f;
-}
-
-/* ── Content ── */
-.content {
-    flex: 1;
-    padding: 32px 48px;
-    overflow-y: auto;
-    background-color: #ffffff;
-    scrollbar-width: none;
-    scrollbar-color: #dadada transparent;
-}
-
-
-/* ══════════════════════════════════════════════
-   Table of Contents — thin line scroll indicator
-   ══════════════════════════════════════════════ */
-
-.toc-sidebar {
-    width: 280px;
-    min-width: 280px;
-    margin-right: 32px;
-    padding: 40px 0;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background: transparent;
-      overflow: hidden;          /* add this */
-
-}
-
-/* Copy button */
-.toc-copy-wrapper {
-    margin-bottom: 20px;
-}
-
-.toc-copy-btn-group {
-    display: inline-flex;
-    align-items: center;
-    border: 1px solid #e5e5e5;
-    border-radius: 8px;
-    overflow: hidden;
-    background: transparent;
-}
-
-.toc-copy-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 14px;
-    height: 36px;
-    border: none;
-    background: transparent;
-    color: #3c3c3c;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: inherit;
-    transition: background 0.15s;
-}
-
-.toc-copy-btn:hover {
-    background: #f5f5f5;
-}
-
-.toc-copy-dropdown {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 36px;
-    border: none;
-    border-left: 1px solid #e5e5e5;
-    background: transparent;
-    color: #3c3c3c;
-    cursor: pointer;
-    transition: background 0.15s;
-}
-
-.toc-copy-dropdown:hover {
-    background: #f5f5f5;
-}
-
-/* Heading */
-.toc-heading {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 8px;
-}
-
-/* Scroll wrapper */
-.toc-scroll-wrapper {
-    position: relative;
-    flex: 1;
-    min-height: 0;
-      scrollbar-width: none;
-
-}
-
-/* Thin track line (light gray) */
-.toc-track-line {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: #ebebeb;
-    border-radius: 2px;
-    z-index: 1;
-      scrollbar-width: none;
-
-}
-
-/* Thin thumb line (dark, moves with scroll) */
-.toc-thumb-line {
-    position: absolute;
-    left: 0;
-    width: 2px;
-    background: #1a1a1a;
-    border-radius: 2px;
-    z-index: 2;
-    transition: top 0.08s ease-out;
-      scrollbar-width: none;
-
-}
-
-/* Hidden native scrollbar */
-.toc-scroll-container {
-    max-height: 100%;
-    overflow-y: auto;
-    padding-left: 16px;
-    scrollbar-width: none;
-    /* -ms-overflow-style: none; */
-}
-
-.toc-scroll-container::-webkit-scrollbar {
-    display: none;
-}
-
-/* Links */
-.toc-links {
-    display: flex;
-    flex-direction: column;
-}
-
-.toc-link {
-    display: block;
-    font-size: 14px;
-    color: rgba(89, 89, 89, 0.9);
-    text-decoration: none;
-    padding: 7px 0;
-    transition: color 0.15s;
-    line-height: 1.4;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.toc-link:hover {
-    color: #1a1a1a;
-}
-
-.toc-h2 {
-    padding-left: 0;
-}
-
-.toc-h3 {
-    padding-left: 12px;
-}
-.toc-sidebar::-webkit-scrollbar {
-    display: none;
-} */
+/* ── Import Inter font so it works on Vercel too ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 * {
   margin: 0;
@@ -383,11 +8,11 @@ body {
 }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: #0f0f0f;
   font-size: 14px;
-  margin-bottom: 50px;
-  margin-left: 40px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ── Header ── */
@@ -405,6 +30,8 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 18px 28px;
+  max-width: 1560px;
+  margin: 0 auto;
 }
 
 .logo img {
@@ -468,7 +95,6 @@ body {
   display: flex;
   align-items: center;
   gap: 22px;
-  margin-right: 80px;
 }
 
 .login-text {
@@ -491,6 +117,8 @@ body {
   display: flex;
   gap: 24px;
   padding: 0 28px 12px;
+  max-width: 1560px;
+  margin: 0 auto;
 }
 
 .tab {
@@ -528,6 +156,7 @@ body {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #eaeaea transparent;
+  flex-shrink: 0;
 }
 
 .sidebar-heading {
@@ -586,17 +215,18 @@ body {
   padding: 32px 48px;
   overflow-y: auto;
   background-color: #ffffff;
-  scrollbar-width: thin;
+  scrollbar-width: none;
   scrollbar-color: #dadada transparent;
+  min-width: 0;
+}
+
+.content::-webkit-scrollbar {
+  display: none;
 }
 
 
 /* ══════════════════════════════════════════════════════════
    Table of Contents — thin line scroll indicator
-   
-   FIX for Vercel: overflow:hidden on aside + explicit 
-   flex-basis:0 + height:100% on scroll container ensures 
-   the height chain resolves in all browsers/builds.
    ══════════════════════════════════════════════════════════ */
 
 .toc-sidebar {
@@ -609,6 +239,11 @@ body {
   height: 100%;
   overflow: hidden;
   background: transparent;
+  flex-shrink: 0;
+}
+
+.toc-sidebar::-webkit-scrollbar {
+  display: none;
 }
 
 /* Copy button */
@@ -707,7 +342,7 @@ body {
   transition: top 0.08s ease-out;
 }
 
-/* Hidden native scrollbar — uses height:100% to fill wrapper */
+/* Hidden native scrollbar */
 .toc-scroll-container {
   height: 100%;
   overflow-y: auto;
