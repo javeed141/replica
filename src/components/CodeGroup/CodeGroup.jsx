@@ -1,11 +1,275 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Info } from "lucide-react";
-import "./index.css";
-import ShikiCodeBlock from "../../Shiki-CodeBlock/CodeBlock";
+import styled from "styled-components";
+import ShikiCodeBlock, { ShikiBlock } from "../../Shiki-CodeBlock/CodeBlock";
+
+// ── Page layout ───────────────────────────────────────────────────────────────
+const DocPage = styled.div`
+  max-width: 672px;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  color: rgb(55, 65, 81);
+  font-size: 16px;
+  line-height: 28px;
+  margin-left: 40px;
+  margin-bottom: 40px;
+
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #0f0f0f;
+    margin-top: 40px;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #0f0f0f;
+    margin-top: 28px;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 28px;
+    color: rgb(55, 65, 81);
+    margin-bottom: 12px;
+  }
+
+  ul {
+    list-style-type: disc;
+    padding-left: 24px;
+    margin-bottom: 12px;
+  }
+
+  ul ul {
+    list-style-type: circle;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+
+  ol {
+    padding-left: 24px;
+    margin-bottom: 12px;
+  }
+
+  li {
+    font-size: 16px;
+    line-height: 28px;
+    color: rgb(55, 65, 81);
+    margin-bottom: 6px;
+  }
+
+  li p {
+    margin-bottom: 0;
+  }
+
+  code {
+    font-family: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 14px;
+    background-color: rgba(175, 184, 193, 0.2);
+    padding: 2px 6px;
+    border-radius: 5px;
+    color: #0f0f0f;
+  }
+
+  kbd {
+    font-family: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 13px;
+    background: lch(97.26% 0.52 290.36);
+    border: 1px solid #ddd;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  strong {
+    font-weight: 600;
+    color: #0f0f0f;
+  }
+`;
+
+const PageGroupLabel = styled.span`
+  font-size: 15px;
+  font-weight: 500;
+  color: #6b6b6b;
+  text-transform: capitalize;
+  display: block;
+  margin-bottom: 14px;
+`;
+
+const PageTitle = styled.h1`
+  font-size: 30px;
+  font-weight: 600;
+  color: #0f0f0f;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+`;
+
+const PageDesc = styled.p`
+  && {
+    color: rgb(55, 65, 81);
+    font-size: 16px;
+    line-height: 28px;
+    margin-bottom: 32px;
+  }
+`;
+
+// ── Info note box ─────────────────────────────────────────────────────────────
+const InfoNoteBox = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: #f7f8f8;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 24px 0;
+
+  && p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 24px;
+    color: #4b4c4d;
+  }
+`;
+
+const InfoNoteIcon = styled.span`
+  color: #858789;
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 4px;
+`;
+
+const PreferCodeText = styled.p`
+  && {
+    margin-bottom: 10px;
+    font-weight: 400;
+  }
+`;
+
+// ── Images / captions ─────────────────────────────────────────────────────────
+const VideoIframeImage = styled.img`
+  border: 0;
+  border-radius: 10px;
+  margin-left: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+const AltTextCaption = styled.span`
+  font-size: 14px;
+  color: #5c5a5a;
+  margin: 5px 0 5px 200px;
+  display: block;
+`;
+
+// ── Links ─────────────────────────────────────────────────────────────────────
+const CodeGroupsLink = styled.a`
+  color: #343131;
+  font-weight: bold;
+`;
+
+const FencedCodeLink = styled.a`
+  color: #343131;
+  font-weight: bold;
+`;
+
+// ── Attribute cards ───────────────────────────────────────────────────────────
+const AttributeCard = styled.div`
+  border-top: 1px solid #eaeaea;
+  padding: 14px 0;
+
+  &:last-child {
+    border-bottom: 1px solid #eaeaea;
+  }
+`;
+
+const AttributeHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const AttributePath = styled.span`
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 8px;
+  letter-spacing: 0.025em;
+  text-transform: capitalize;
+  line-height: 16px;
+`;
+
+const AttributeName = styled.span`
+  font-weight: 700;
+  font-size: 15px;
+  color: #1a1a1a;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+`;
+
+const AttributeType = styled.span`
+  font-size: 13px;
+  color: #6b7280;
+`;
+
+const AttributeDesc = styled.p`
+  && {
+    margin: 0;
+    font-size: 15px;
+    color: #374151;
+    line-height: 1.7;
+  }
+`;
+
+// ── Code group tabs ───────────────────────────────────────────────────────────
+const ShikiGroupWrapper = styled.div`
+  margin: 16px 0;
+  border: 1px solid #eaeaea;
+  border-radius: 14px;
+  background-color: rgba(241, 241, 241, 0.8);
+  padding: 0 4px 4px 4px;
+
+  ${ShikiBlock} {
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    margin: 0;
+    background-color: #fff;
+  }
+`;
+
+const ShikiGroupTabs = styled.div`
+  display: flex;
+  padding: 0 12px;
+  gap: 8px;
+  height: 36px;
+  align-items: center;
+`;
+
+const ShikiGroupTab = styled.button`
+  padding: 6px;
+  font-size: 13px;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-weight: 500;
+  color: ${({ $active }) => ($active ? "#1a1a1a" : "#6b7280")};
+  background: none;
+  border: none;
+  border-bottom: ${({ $active }) => ($active ? "2px solid #1a1a1a" : "2px solid transparent")};
+  cursor: pointer;
+
+  &:hover {
+    color: #374151;
+  }
+`;
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 const CodeGroup = () => {
-  // Inside CodeGroup component, above the return statement:
-
   const [activeTab, setActiveTab] = useState(0);
 
   const codeGroupTabs = [
@@ -25,8 +289,6 @@ response = requests.post('/api/docs',
   -H "Content-Type: application/json" \\
   -d '{"title": "Getting Started"}'` },
   ];
-
-  // autotabs const [autoTab, setAutoTab] = useState(0);
 
   const [autoTab, setAutoTab] = useState(0);
 
@@ -51,13 +313,13 @@ function sayHello() {
   ];
 
   return (
-    <div className="doc-page">
-      <span className="page-group">Components</span>
-      <h1 className="page-title">Code blocks and groups</h1>
-      <p className="page-desc">
+    <DocPage>
+      <PageGroupLabel>Components</PageGroupLabel>
+      <PageTitle>Code blocks and groups</PageTitle>
+      <PageDesc>
         Display inline code and code blocks with syntax highlighting, line
         highlighting, focus effects, and tabbed interfaces for multiple examples.
-      </p>
+      </PageDesc>
 
       {/* ── Overview ── */}
       <h2>Overview</h2>
@@ -76,9 +338,9 @@ function sayHello() {
       <p>Code blocks and groups are ideal for:</p>
       <ul>
         <li>Single code snippets with syntax highlighting and copy support</li>
-        <li>Multi-language SDK examples in tabs (similar to <a href="/tabs" className="code-groups-video">Tabs</a>)</li>
+        <li>Multi-language SDK examples in tabs (similar to <CodeGroupsLink href="/tabs">Tabs</CodeGroupsLink>)</li>
         <li>Before/after, request/response, or setup/usage comparisons</li>
-        <li>Step-by-step walkthroughs when combined with <a href="/steps" className="code-groups-video">Steps</a></li>
+        <li>Step-by-step walkthroughs when combined with <CodeGroupsLink href="/steps">Steps</CodeGroupsLink></li>
       </ul>
 
       <p>At a high level:</p>
@@ -104,16 +366,16 @@ function sayHello() {
         <li>A code block appears with the placeholder "Add your code here…". Paste or type your code into the block.</li>
       </ol>
       <p>Use the language dropdown on the top-right of the block to pick the correct language. This controls <strong>syntax highlighting</strong> and the copy behavior.</p>
-      <img className="video-iframe-image" src="https://blob-cdn.documentation.ai/org-53a37986-2c9e-4094-b9e8-1e1ffae9e9ee/doc-b389b141-ae58-4fd5-91f9-6702fae9ac58/1767254413848-dj42wgaz18u-pasted-image-1767254412456.png?auto=format%2Ccompress&w=560&q=75" />
-      <span id="alt-text-for-web-editor">Code Block in Web Editor</span>
+      <VideoIframeImage src="https://blob-cdn.documentation.ai/org-53a37986-2c9e-4094-b9e8-1e1ffae9e9ee/doc-b389b141-ae58-4fd5-91f9-6702fae9ac58/1767254413848-dj42wgaz18u-pasted-image-1767254412456.png?auto=format%2Ccompress&w=560&q=75" />
+      <AltTextCaption>Code Block in Web Editor</AltTextCaption>
       <h3>Insert a code group</h3>
       <ol>
         <li>Place your cursor on a new line.</li>
         <li>Type <kbd>/</kbd> and select <strong>Code Group</strong>.</li>
         <li>A group is created with a default tab (for example,<strong> Tab 1</strong>) and a code editor area.</li>
       </ol>
-      <img className="video-iframe-image" src="https://blob-cdn.documentation.ai/org-53a37986-2c9e-4094-b9e8-1e1ffae9e9ee/doc-b389b141-ae58-4fd5-91f9-6702fae9ac58/1767254609053-kupzap94d3p-pasted-image-1767254606676.png?auto=format%2Ccompress&w=560&q=75" />
-      <span id="alt-text-for-web-editor">Code Block inside in Code Editor </span>
+      <VideoIframeImage src="https://blob-cdn.documentation.ai/org-53a37986-2c9e-4094-b9e8-1e1ffae9e9ee/doc-b389b141-ae58-4fd5-91f9-6702fae9ac58/1767254609053-kupzap94d3p-pasted-image-1767254606676.png?auto=format%2Ccompress&w=560&q=75" />
+      <AltTextCaption>Code Block inside in Code Editor </AltTextCaption>
       <p>Inside a code group you can:</p>
       <ul>
         <li><strong>Add a tab:</strong> Click the <strong>+</strong> next to the last tab.</li>
@@ -124,20 +386,20 @@ function sayHello() {
 
       <p>The group toolbar also lets you duplicate or delete the entire group.</p>
 
-      <div className="callout">
-        <span className="callout-icon"> <Info size={18} />  </span>
+      <InfoNoteBox>
+        <InfoNoteIcon> <Info size={18} />  </InfoNoteIcon>
         <div>
-          <p id="prefer-code-text"><strong>Prefer writing in code?</strong></p>
+          <PreferCodeText><strong>Prefer writing in code?</strong></PreferCodeText>
           <p>You can switch to <strong>MDX view inside the Web Editor</strong> to write or edit this component using the same syntax as the Code Editor. This is useful if you want full control while staying in the Web Editor.</p>
         </div>
-      </div>
+      </InfoNoteBox>
 
       {/* ── Using with Code Editor ── */}
       <h2>Using with Code Editor</h2>
       <p>When working in a code editor, you write code blocks and code groups with standard fenced code syntax and the <code>&lt;CodeGroup&gt;</code> component.</p>
 
       <h3>Single code block</h3>
-      <p>Use <a href="www.facebook.com" target='_blank' id="special-margin" className='video-frames-links-images images-iframes-video'><u>fenced code blocks</u></a> with three backticks and a language identifier:</p>
+      <p>Use <FencedCodeLink href="www.facebook.com" target='_blank'><u>fenced code blocks</u></FencedCodeLink> with three backticks and a language identifier:</p>
       <ShikiCodeBlock
         language="typescript"
         code={`const apiCall = async () => {
@@ -187,7 +449,7 @@ curl -X POST https://api.example.com/docs \\
       <ul>
         <li>Each fenced block inside <code>&lt;CodeGroup&gt;</code> must have a language tag (for example, <code>typescript</code>, <code>python</code>, <code>bash</code>).</li>
         <li><code>tabs="TypeScript,Python,Bash"</code> controls the visible tab labels. If you omit <code>tabs</code>, the language names are used instead.</li>
-        <li>You can combine <code>&lt;CodeGroup&gt;</code> with <a href="/tabs" className="code-groups-video">Tabs</a> or <a href="/steps" className="code-groups-video">Steps</a> when you need more complex layouts.</li>
+        <li>You can combine <code>&lt;CodeGroup&gt;</code> with <CodeGroupsLink href="/tabs">Tabs</CodeGroupsLink> or <CodeGroupsLink href="/steps">Steps</CodeGroupsLink> when you need more complex layouts.</li>
       </ul>
 
       {/* ── Advanced options ── */}
@@ -313,23 +575,23 @@ curl -X POST https://api.example.com/docs \\
 \`\`\`
 </CodeGroup>`}
       />
-      <div className="shiki-group">
-        <div className="shiki-group-tabs">
+      <ShikiGroupWrapper>
+        <ShikiGroupTabs>
           {codeGroupTabs.map((tab, i) => (
-            <button
+            <ShikiGroupTab
               key={i}
-              className={`shiki-group-tab ${i === activeTab ? "shiki-group-tab-active" : ""}`}
+              $active={i === activeTab}
               onClick={() => setActiveTab(i)}
             >
               {tab.label}
-            </button>
+            </ShikiGroupTab>
           ))}
-        </div>
+        </ShikiGroupTabs>
         <ShikiCodeBlock
           language={codeGroupTabs[activeTab].language}
           code={codeGroupTabs[activeTab].code}
         />
-      </div>
+      </ShikiGroupWrapper>
       <p>You can also control tabs explicitly:</p>
       <ul>
         <li><code>tabs</code>: Comma-separated list of tab labels, for example <code>tabs="TypeScript,Python,Bash"</code>.</li>
@@ -369,23 +631,24 @@ example = "This tab shows: python"
 
       <h3>Auto-detected tabs</h3>
       <p>Without the <code>tabs</code> attribute, CodeGroup automatically uses language identifiers as tab names:</p>
-      <div className="shiki-group">
-        <div className="shiki-group-tabs">
+      <ShikiGroupWrapper>
+        <ShikiGroupTabs>
           {autoDetectedTabs.map((tab, i) => (
-            <button
+            <ShikiGroupTab
               key={i}
-              className={`shiki-group-tab ${i === autoTab ? "shiki-group-tab-active" : ""}`}
+              $active={i === autoTab}
               onClick={() => setAutoTab(i)}
             >
               {tab.label}
-            </button>
+            </ShikiGroupTab>
           ))}
-        </div>
+        </ShikiGroupTabs>
         <ShikiCodeBlock
           language={autoDetectedTabs[autoTab].language}
           code={autoDetectedTabs[autoTab].code}
         />
-      </div>      <ShikiCodeBlock
+      </ShikiGroupWrapper>
+      <ShikiCodeBlock
         language="tsx"
         code={`<CodeGroup>
 \`\`\`typescript
@@ -399,24 +662,24 @@ example = "This tab shows: python"
 
       <h3>CodeGroup with highlighting and focus</h3>
       <p>Line highlighting and focus effects work within CodeGroup tabs:</p>
-      <div className="shiki-group">
-        <div className="shiki-group-tabs">
+      <ShikiGroupWrapper>
+        <ShikiGroupTabs>
           {highlightTabs.map((tab, i) => (
-            <button
+            <ShikiGroupTab
               key={i}
-              className={`shiki-group-tab ${i === highlightTab ? "shiki-group-tab-active" : ""}`}
+              $active={i === highlightTab}
               onClick={() => setHighlightTab(i)}
             >
               {tab.label}
-            </button>
+            </ShikiGroupTab>
           ))}
-        </div>
+        </ShikiGroupTabs>
         <ShikiCodeBlock
           language={codeGroupTabs[activeTab].language}
           code={codeGroupTabs[activeTab].code}
         />
-      </div>
-      
+      </ShikiGroupWrapper>
+
       <ShikiCodeBlock
         language="tsx"
         wrap={true}
@@ -448,55 +711,54 @@ function calculateTotal(price: number, tax: number): number {
       />
 
       {/* ── Attribute reference ── */}
-      {/* ── Attribute reference ── */}
       <h2>Attribute reference</h2>
       <p>Use these attributes on fenced code blocks or <code>&lt;CodeGroup&gt;</code>:</p>
 
-      <div className="attribute-card">
-        <div className="attribute-header">
-          <span className="attribute-path">Path</span>
-          <span className="attribute-name">highlight</span>
-          <span className="attribute-type">string</span>
-        </div>
-        <p className="attribute-desc">Line numbers or ranges to highlight. Examples: <code>"1"</code>, <code>"1-3"</code>, <code>"1,3,5-7"</code>.</p>
-      </div>
+      <AttributeCard>
+        <AttributeHeader>
+          <AttributePath>Path</AttributePath>
+          <AttributeName>highlight</AttributeName>
+          <AttributeType>string</AttributeType>
+        </AttributeHeader>
+        <AttributeDesc>Line numbers or ranges to highlight. Examples: <code>"1"</code>, <code>"1-3"</code>, <code>"1,3,5-7"</code>.</AttributeDesc>
+      </AttributeCard>
 
-      <div className="attribute-card">
-        <div className="attribute-header">
-          <span className="attribute-path">Path</span>
-          <span className="attribute-name">focus</span>
-          <span className="attribute-type">string</span>
-        </div>
-        <p className="attribute-desc">Line numbers or ranges to focus on (blurs other lines). Examples: <code>"2"</code>, <code>"2-4"</code>, <code>"1,4-6"</code>.</p>
-      </div>
+      <AttributeCard>
+        <AttributeHeader>
+          <AttributePath>Path</AttributePath>
+          <AttributeName>focus</AttributeName>
+          <AttributeType>string</AttributeType>
+        </AttributeHeader>
+        <AttributeDesc>Line numbers or ranges to focus on (blurs other lines). Examples: <code>"2"</code>, <code>"2-4"</code>, <code>"1,4-6"</code>.</AttributeDesc>
+      </AttributeCard>
 
-      <div className="attribute-card">
-        <div className="attribute-header">
-          <span className="attribute-path">Path</span>
-          <span className="attribute-name">show-lines</span>
-          <span className="attribute-type">boolean | string</span>
-        </div>
-        <p className="attribute-desc">Set to <code>{"{true}"}</code> to show line numbers for a block or an entire group.</p>
-      </div>
+      <AttributeCard>
+        <AttributeHeader>
+          <AttributePath>Path</AttributePath>
+          <AttributeName>show-lines</AttributeName>
+          <AttributeType>boolean | string</AttributeType>
+        </AttributeHeader>
+        <AttributeDesc>Set to <code>{"{true}"}</code> to show line numbers for a block or an entire group.</AttributeDesc>
+      </AttributeCard>
 
-      <div className="attribute-card">
-        <div className="attribute-header">
-          <span className="attribute-path">Path</span>
-          <span className="attribute-name">tabs</span>
-          <span className="attribute-type">string</span>
-        </div>
-        <p className="attribute-desc">Comma-separated custom tab names (for example, <code>"TypeScript,Python,Bash"</code>). Overrides auto-detected language labels.</p>
-      </div>
+      <AttributeCard>
+        <AttributeHeader>
+          <AttributePath>Path</AttributePath>
+          <AttributeName>tabs</AttributeName>
+          <AttributeType>string</AttributeType>
+        </AttributeHeader>
+        <AttributeDesc>Comma-separated custom tab names (for example, <code>"TypeScript,Python,Bash"</code>). Overrides auto-detected language labels.</AttributeDesc>
+      </AttributeCard>
 
-      <div className="attribute-card">
-        <div className="attribute-header">
-          <span className="attribute-path">Path</span>
-          <span className="attribute-name">wrap</span>
-          <span className="attribute-type">boolean | string</span>
-        </div>
-        <p className="attribute-desc">Controls whether long lines wrap inside the code block. Defaults to <code>false</code> (no wrapping, horizontal scrolling). Set using <code>wrap</code>, <code>wrap="true"</code>, or <code>wrap={"{true}"}</code> to enable <code>white-space: pre-wrap</code> and <code>word-break: break-word</code> with vertical scrolling only.</p>
-      </div>
-    </div>
+      <AttributeCard>
+        <AttributeHeader>
+          <AttributePath>Path</AttributePath>
+          <AttributeName>wrap</AttributeName>
+          <AttributeType>boolean | string</AttributeType>
+        </AttributeHeader>
+        <AttributeDesc>Controls whether long lines wrap inside the code block. Defaults to <code>false</code> (no wrapping, horizontal scrolling). Set using <code>wrap</code>, <code>wrap="true"</code>, or <code>wrap={"{true}"}</code> to enable <code>white-space: pre-wrap</code> and <code>word-break: break-word</code> with vertical scrolling only.</AttributeDesc>
+      </AttributeCard>
+    </DocPage>
   );
 };
 

@@ -1,7 +1,222 @@
-import { Copy,Info } from "lucide-react";
-import "./index.css";
-import CodeBlock from "../../CodeBlock/CodeBlock";
+import { Info } from "lucide-react";
+import styled from "styled-components";
 import ShikiCodeBlock from "../../Shiki-CodeBlock/CodeBlock";
+
+// ── Page layout ───────────────────────────────────────────────────────────────
+const DocPage = styled.div`
+  max-width: 672px;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  color: rgb(55, 65, 81);
+  font-size: 16px;
+  line-height: 28px;
+  margin-left: 40px;
+  margin-bottom: 40px;
+
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #0f0f0f;
+    margin-top: 40px;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #0f0f0f;
+    margin-top: 28px;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 28px;
+    color: rgb(55, 65, 81);
+    margin-bottom: 12px;
+  }
+
+  ul {
+    list-style-type: disc;
+    padding-left: 24px;
+    margin-bottom: 12px;
+  }
+
+  ul ul {
+    list-style-type: circle;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+
+  ol {
+    padding-left: 24px;
+    margin-bottom: 12px;
+  }
+
+  li {
+    font-size: 16px;
+    line-height: 28px;
+    color: rgb(55, 65, 81);
+    margin-bottom: 6px;
+  }
+
+  li p {
+    margin-bottom: 0;
+  }
+
+  code {
+    font-family: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 14px;
+    background-color: rgba(175, 184, 193, 0.2);
+    padding: 2px 6px;
+    border-radius: 5px;
+    color: #0f0f0f;
+  }
+
+  kbd {
+    font-family: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 13px;
+    background: lch(97.26% 0.52 290.36);
+    border: 1px solid #ddd;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  strong {
+    font-weight: 600;
+    color: #0f0f0f;
+  }
+`;
+
+const PageGroupLabel = styled.span`
+  font-size: 15px;
+  font-weight: 500;
+  color: #6b6b6b;
+  text-transform: capitalize;
+  display: block;
+  margin-bottom: 14px;
+`;
+
+const PageTitle = styled.h1`
+  font-size: 30px;
+  font-weight: 600;
+  color: #0f0f0f;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+`;
+
+const PageDesc = styled.p`
+  && {
+    color: rgb(55, 65, 81);
+    font-size: 16px;
+    line-height: 28px;
+    margin-bottom: 32px;
+  }
+`;
+
+// ── Info note box ─────────────────────────────────────────────────────────────
+const InfoNoteBox = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: #f7f8f8;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 24px 0;
+
+  && p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 24px;
+    color: #4b4c4d;
+  }
+`;
+
+const InfoNoteIcon = styled.span`
+  color: #858789;
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 4px;
+`;
+
+// ── Video / iframe elements ───────────────────────────────────────────────────
+const VideoEmbed = styled.div`
+  margin: 24px 0;
+  border-radius: 12px;
+  overflow: hidden;
+
+  iframe {
+    width: 100%;
+    height: 378px;
+    border: none;
+  }
+`;
+
+const VideoIframeImage = styled.img`
+  border: 0;
+  border-radius: 10px;
+  margin-left: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+const VideoAltText = styled.p`
+  && {
+    margin-left: 70px;
+    color: #646363;
+    font-size: 13.5px;
+  }
+`;
+
+// ── Inline code span for component names in headings ──────────────────────────
+const VideoIframeCode = styled.span`
+  font-weight: normal;
+  background-color: rgba(227, 226, 224, 0.5);
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 14px;
+  font-family: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, Consolas, monospace;
+  color: #444141;
+  letter-spacing: -0.2px;
+`;
+
+// ── Links ─────────────────────────────────────────────────────────────────────
+const VideoFramesLink = styled.a`
+  font-weight: bold;
+  color: #343131;
+  text-decoration: none;
+  ${({ $withMargin }) => $withMargin && `margin-left: 10px;`}
+`;
+
+const CodeGroupsLink = styled.a`
+  color: #343131;
+  font-weight: bold;
+`;
+
+// ── Copy button ───────────────────────────────────────────────────────────────
+const CopyBtn = styled.button`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: white;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #666;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  &:hover {
+    color: #0f0f0f;
+    background: #f5f5f5;
+  }
+`;
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 const VideosAndIframes = () => {
   const handleCopy = (text) => {
@@ -39,12 +254,12 @@ const VideosAndIframes = () => {
 />`;
 
   return (
-    <div className="doc-page">
-      <span className="page-group">Components</span>
-      <h1 className="page-title">Videos and iframes</h1>
-      <p className="page-desc">
+    <DocPage>
+      <PageGroupLabel>Components</PageGroupLabel>
+      <PageTitle>Videos and iframes</PageTitle>
+      <PageDesc>
         Reference for embedding videos and iframes using the editor UI and the Video / Iframe components.
-      </p>
+      </PageDesc>
 
       <h2 id="overview">Overview</h2>
       <p>Use videos and iframes to embed rich, interactive content directly in your docs, such as:</p>
@@ -60,12 +275,12 @@ const VideosAndIframes = () => {
         <li>Use the <strong>Code Editor</strong> to write <code>&lt;Video&gt;</code> and <code>&lt;Iframe&gt;</code> components in MDX for full control.</li>
       </ul>
 
-      <p>For static images, see<a href="www.facebook.com" target='_blank' className='video-frames-links-images images-iframes-video'><u>Images</u></a>. For showing embed code examples (such as iframe snippets) as code instead of rendering them, use <a href="www.facebook.com" target='_blank' className='video-frames-links-images'><u>Code and Groups</u></a>.</p>
+      <p>For static images, see<VideoFramesLink href="www.facebook.com" target='_blank' $withMargin><u>Images</u></VideoFramesLink>. For showing embed code examples (such as iframe snippets) as code instead of rendering them, use <VideoFramesLink href="www.facebook.com" target='_blank'><u>Code and Groups</u></VideoFramesLink>.</p>
 
-      <div className="callout">
-        <span className="callout-icon"><Info size={18}/></span>
+      <InfoNoteBox>
+        <InfoNoteIcon><Info size={18}/></InfoNoteIcon>
         <p>Please note that we do not support uploading videos directly on to the platform. You need to use a 3rd party platform such as YouTube, Vimeo, Loom or even MP4 URL.</p>
-      </div>
+      </InfoNoteBox>
 
       <h2 id="using-with-web-editor">Using with Web Editor</h2>
       <h3 id="insert-a-video-or-iframe">Insert a video or iframe</h3>
@@ -83,17 +298,17 @@ const VideosAndIframes = () => {
       </ol>
 
       <p>You can use the same block for both direct video URLs and iframe-based embeds from other platforms.</p>
-<div className="video-embed">
-    <img src="https://blob-cdn.documentation.ai/org-53a37986-2c9e-4094-b9e8-1e1ffae9e9ee/doc-b389b141-ae58-4fd5-91f9-6702fae9ac58/1767252307874-79xuo4odvfr-pasted-image-1767252306043.png?auto=format%2Ccompress&w=640&q=75" height="300px" width ="500px" className="video-iframe-image"
- />
- <p id="alt-text-videi-iframe">Video embed block with alignment and resize controls in the Web Editor</p>
- </div>      <div className="callout">
-        <span className="callout-icon"><Info /></span>
+      <VideoEmbed>
+        <VideoIframeImage src="https://blob-cdn.documentation.ai/org-53a37986-2c9e-4094-b9e8-1e1ffae9e9ee/doc-b389b141-ae58-4fd5-91f9-6702fae9ac58/1767252307874-79xuo4odvfr-pasted-image-1767252306043.png?auto=format%2Ccompress&w=640&q=75" height="300px" width="500px" />
+        <VideoAltText>Video embed block with alignment and resize controls in the Web Editor</VideoAltText>
+      </VideoEmbed>
+      <InfoNoteBox>
+        <InfoNoteIcon><Info /></InfoNoteIcon>
         <div>
           <p><strong>Prefer writing in code?</strong></p>
           <p>You can switch to <strong>MDX view inside the Web Editor</strong> to write or edit this component using the same syntax as the Code Editor. This is useful if you want full control while staying in the Web Editor.</p>
         </div>
-      </div>
+      </InfoNoteBox>
 
       <h3 id="align-and-resize">Align and resize</h3>
       <p>Hover over the embedded video or iframe to reveal controls:</p>
@@ -119,19 +334,19 @@ const VideosAndIframes = () => {
       <h2 id="using-with-code-editor">Using with Code Editor</h2>
       <p>In the Code Editor, you work directly in MDX using the <code>&lt;Video&gt;</code> and <code>&lt;Iframe&gt;</code> components.</p>
 
-      <h3 ><span id="video-iframe-mode">&lt;Video&gt;</span> component (iframe mode)</h3>
+      <h3><VideoIframeCode>&lt;Video&gt;</VideoIframeCode> component (iframe mode)</h3>
       <p>Use iframe mode for platforms that provide an embed URL, such as YouTube, Vimeo, Loom, or Wistia.</p>
-        <button className="copy-btn" onClick={() => handleCopy(videoIframeCode)}>
+        <CopyBtn onClick={() => handleCopy(videoIframeCode)}>
           {/* <Copy size={14} /> */}
-        </button>
-             <ShikiCodeBlock
-                language="tsx"
-                code={videoIframeCode}
-            />
+        </CopyBtn>
+        <ShikiCodeBlock
+          language="tsx"
+          code={videoIframeCode}
+        />
 
       <p>Key props:</p>
       <ul>
-        <li><code className="highlight-blocks">src</code> (string, required): Video embed URL from the platform.</li>
+        <li><code>src</code> (string, required): Video embed URL from the platform.</li>
         <li><code>width</code> / <code>height</code> (string): Player dimensions in pixels.</li>
         <li><code>title</code> (string): Accessible title for screen readers.</li>
         <li><code>allow-full-screen</code> (boolean-like): Allow fullscreen playback (defaults to <code>true</code>).</li>
@@ -139,15 +354,15 @@ const VideosAndIframes = () => {
         <li><code>style</code> (string): Inline styles for alignment and sizing.</li>
       </ul>
 
-      <h3 id="video-html5-mode"><span id="video-iframe-mode">&lt;Video&gt;</span> component (HTML5 mode)</h3>
+      <h3 id="video-html5-mode"><VideoIframeCode>&lt;Video&gt;</VideoIframeCode> component (HTML5 mode)</h3>
       <p>Use HTML5 mode for self-hosted video files, with native browser controls.</p>
-        <button className="copy-btn" onClick={() => handleCopy(videoHtml5Code)}>
+        <CopyBtn onClick={() => handleCopy(videoHtml5Code)}>
           {/* <Copy size={14} /> */}
-        </button>
-             <ShikiCodeBlock
-                language="tsx"
-                code={videoHtml5Code}
-            />
+        </CopyBtn>
+        <ShikiCodeBlock
+          language="tsx"
+          code={videoHtml5Code}
+        />
 
       <p>Additional props for HTML5 playback:</p>
       <ul>
@@ -160,13 +375,12 @@ const VideosAndIframes = () => {
         <li><code>fetchPriority</code> (string): <code>high</code>, <code>low</code>, or <code>auto</code>.</li>
       </ul>
 
-      <h3 id="iframe-component"><span id="video-iframe-mode">&lt;Iframe&gt;</span> component</h3>
+      <h3 id="iframe-component"><VideoIframeCode>&lt;Iframe&gt;</VideoIframeCode> component</h3>
       <p>Use <code>&lt;Iframe&gt;</code> for non-video embeds such as forms, dashboards, and interactive tools.</p>
-    
-         <ShikiCodeBlock
-                language="tsx"
-                code={iframeCode}
-            />
+      <ShikiCodeBlock
+        language="tsx"
+        code={iframeCode}
+      />
 
       <p>Key props:</p>
       <ul>
@@ -179,7 +393,7 @@ const VideosAndIframes = () => {
         <li><code>style</code> (string): Inline styles for borders and layout.</li>
       </ul>
 
-      <p>Use <a href="/code-and-groups" className="code-groups-video">Code and Groups</a> when you want to show iframe snippets as examples rather than render them.</p>
+      <p>Use <CodeGroupsLink href="/code-and-groups">Code and Groups</CodeGroupsLink> when you want to show iframe snippets as examples rather than render them.</p>
 
       <h2 id="advanced-options">Advanced options</h2>
       <h3 id="platform-support">Platform support</h3>
@@ -210,7 +424,7 @@ const VideosAndIframes = () => {
         </li>
         <li>Only embed content from origins you trust, especially when allowing scripts or same-origin access.</li>
       </ul>
-    </div>
+    </DocPage>
   );
 };
 

@@ -6,19 +6,20 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import {  Copy, Check, ChevronDown } from "lucide-react";
+import { Copy, Check, ChevronDown, AlignLeft, ArrowRight } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
+import styled, { createGlobalStyle } from "styled-components";
 
 import {
   Search, Sun, Sparkles, Star, Settings, Zap, Globe, Code,
   Settings2, Type, List, Square, Columns, Image, Monitor,
-  CodeXml, GitBranch, MessageSquare
+  CodeXml, GitBranch, MessageSquare,
 } from "lucide-react";
-import "./App.css";
+
 import VideosAndIframes from "./components/VideoAndIframes/VideoIframe";
-// import { Search, Sun, Sparkles } from "lucide-react";
 import CodeGroup from "./components/CodeGroup/CodeGroup";
 import Callout from "./components/Callout/Callout";
+
 const Introduction = () => <h2>Introduction</h2>;
 const CoreConcepts = () => <h2>Core Concepts</h2>;
 const Quickstart = () => <h2>Quickstart</h2>;
@@ -54,15 +55,487 @@ const sidebarSections = [
     ],
   },
 ];
-import { AlignLeft } from "lucide-react";
+
+// ══════════════════════════════════════════════
+//  GLOBAL STYLES (replaces *, body in App.css)
+// ══════════════════════════════════════════════
 
 
+// ══════════════════════════════════════════════
+//  HEADER — styled components
+// ══════════════════════════════════════════════
+
+
+const SearchBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 270px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 7px 12px;
+  height: 35px;
+`;
+
+const SearchLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const SearchText = styled.span`
+  color: #999;
+  font-size: 15px;
+`;
+
+const SearchShortcut = styled.span`
+  font-size: 12px;
+  background: #f7f2f2;
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: #636161;
+`;
+
+// const AskAiBtn = styled.button`
+//   display: flex;
+//   align-items: center;
+//   gap: 6px;
+//   border: 1px solid #ddd;
+//   border-radius: 8px;
+//   padding: 4px 12px;
+//   background: white;
+//   font-size: 13px;
+//   cursor: pointer;
+//   color: #565656;
+//   height: 40px;
+//   font-weight:500;
+// `;
+
+const AskAiBtn = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+  color: #3e3e3e;
+  height: 35px;
+  font-weight:600;
+  font-family: inherit;
+
+ 
+
+  &:hover {
+    background: #fafafa;
+    border-color: #ccc;
+  }
+`;
+const HeaderActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 22px;
+`;
+
+const LoginText = styled.span`
+  font-size: 14px;
+  color: rgb(50, 50, 50);
+`;
+
+const GetStartedBtn = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: none;
+  border-radius: 1rem;
+  padding: 6px 16px;
+  font-size: 0.855rem;
+  line-height: ${1.25 / 0.875};
+  font-weight: 500;
+  cursor: pointer;
+  font-family: "Inter", system-ui, -apple-system, arial;
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
+
+// ══════════════════════════════════════════════
+//  SIDEBAR — styled components
+// ══════════════════════════════════════════════
+const SidebarWrapper = styled.aside`
+  width: 260px;
+  min-width: 260px;
+  border-right: 1px solid #e8e8e8;
+  padding: 24px 16px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #eaeaea transparent;
+  flex-shrink: 0;
+`;
+
+const SidebarSection = styled.div`
+  margin-bottom: 24px;
+`;
+
+const SidebarHeading = styled.p`
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f0f0f;
+  margin-bottom: 10px;
+  padding: 0 12px;
+`;
+
+const SidebarStyledLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  font-size: 15px;
+  text-decoration: none;
+  border-radius: 6px;
+  line-height: 1.5;
+  background: ${({ $active }) => ($active ? "#ebebeb" : "transparent")};
+  font-weight: ${({ $active }) => ($active ? "500" : "400")};
+  color: ${({ $active }) => ($active ? "#0f0f0f" : "#444")};
+
+  &:hover {
+    background: #f5f5f5;
+  }
+`;
+
+const SidebarIcon = styled.span`
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: ${({ $active }) => ($active ? "#0f0f0f" : "#999")};
+`;
+
+const LabelSidebarText = styled.span`
+  font-size: 13px;
+`;
+
+// ══════════════════════════════════════════════
+//  LAYOUT — styled components
+// ══════════════════════════════════════════════
+const LayoutWrapper = styled.div`
+  display: flex;
+  position: fixed;
+  top: 105px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 1560px;
+  margin: 0 auto;
+
+  
+`;
+
+const ContentArea = styled.main`
+  flex: 1;
+  padding: 32px 48px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  min-width: 0;
+  scrollbar-width: none;
+  scrollbar-color: #dadada transparent;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+// ══════════════════════════════════════════════
+//  TOC SIDEBAR — styled components
+// ══════════════════════════════════════════════
+const TocSidebarWrapper = styled.aside`
+  width: 280px;
+  min-width: 280px;
+  margin-right: 32px;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: transparent;
+  flex-shrink: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #eaeaea transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #eaeaea;
+    border-radius: 2px;
+  }
+`;
+
+const TocCopyWrapper = styled.div`
+  margin-bottom: 20px;
+  flex-shrink: 0;
+`;
+
+const TocCopyBtnGroup = styled.div`
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+  background: transparent;
+`;
+
+const TocCopyBtn = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: #3c3c3c;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+`;
+
+const TocCopyDropdown = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 36px;
+  border: none;
+  border-left: 1px solid #e5e5e5;
+  background: transparent;
+  color: #3c3c3c;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+`;
+
+const TocHeadingRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+`;
+
+const TocScrollWrapper = styled.div`
+  position: relative;
+  margin-top: 4px;
+`;
+
+const TocLinks = styled.nav`
+  display: flex;
+  flex-direction: column;
+`;
+
+const TocLinkItem = styled.a`
+  display: block;
+  font-size: 14px;
+  text-decoration: none;
+  padding-top: 12px;
+  height: 30px;
+  box-sizing: border-box;
+  line-height: 1;
+  overflow: hidden;
+  transition: color 0.2s;
+  color: ${({ $active }) => ($active ? "#1a1a1a" : "rgba(89, 89, 89, 0.9)")};
+  font-weight: ${({ $active }) => ($active ? "500" : "400")};
+  padding-left: ${({ $level }) => ($level === "h3" ? "36px" : "24px")};
+
+  &:hover {
+    color: #1a1a1a;
+  }
+`;
+
+// ══════════════════════════════════════════════
+//  HEADER COMPONENT
+// ══════════════════════════════════════════════
+const HeaderTabs = styled.div`
+ 
+   display: flex;
+  gap: 24px;
+  padding: 0 28px;
+  max-width: 1560px;
+  margin: 0 auto;
+`;
+
+const Tab = styled.span`
+  font-size: 14px;
+  cursor: pointer;
+  padding-bottom: 12px;
+  position: relative;
+  display: inline-block;
+  color: ${({ $active }) => ($active ? "#0f0f0f" : "#6b6b6b")};
+  font-weight: ${({ $active }) => ($active ? "500" : "400")};
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: ${({ $active }) => ($active ? "#0f0f0f" : "transparent")};
+  }
+   &:hover::after {
+    position: absolute;
+    background:${({$active})  => ($active ? "" : "#e8e8e8" )}   ;
+   bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+}
+`;
+
+const HeaderWrapper = styled.header`
+  border-bottom: 1px solid #e8e8e8;
+  position: sticky;
+  top: 0;
+  // border-color:red;
+  background: #ffffff;
+  z-index: 10;
+
+      background: var(--bg);
+   
+  }
+`;
+
+const HeaderTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 28px;
+  max-width: 1560px;
+  margin: 0 auto;
+`;
+
+const LogoWrap = styled.span`
+  img {
+    height: 34px;
+  }
+`;
+
+const HeaderCenter = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 150px;
+`;
+import { useTheme } from "./Context/ThemeContext";
+import ThemeContext from "./Context/ThemeContext";
+function Header() {
+  const [activeTab, setActiveTab] = useState("Documentation");
+const { mode, toggleTheme, theme } = useTheme()
+  return (
+    <HeaderWrapper mode={mode}>
+    <HeaderTop>
+        <LogoWrap>
+          <img
+            src="https://blob-cdn.documentation.ai/org-53a37986-2c9e-4094-b9e8-1e1ffae9e9ee/doc-b389b141-ae58-4fd5-91f9-6702fae9ac58/1767703565522-24h54tbc4tf-logo_light_mode.svg?auto=format%2Ccompress&w=1650&q=75"
+            alt="Logo"
+          />
+        </LogoWrap>
+        <HeaderCenter>
+          <SearchBox>
+            <SearchLeft>
+              <Search size={16} color="#4c4b4b" />
+              <SearchText>Search</SearchText>
+            </SearchLeft>
+            <SearchShortcut>Ctrl+K</SearchShortcut>
+          </SearchBox>
+          <AskAiBtn>
+            <Sparkles size={14} />
+            Ask AI
+          </AskAiBtn>
+        </HeaderCenter>
+        <HeaderActions>
+          <LoginText>Login</LoginText>
+          <GetStartedBtn>Get Started <ArrowRight size={13} style={{ marginLeft: "1px",marginTop:"1px" }} /></GetStartedBtn>
+          <Sun size={18} color="#999" onClick={() => {
+            console.log(mode)
+            toggleTheme()
+          }
+
+        }/>
+        </HeaderActions>
+      </HeaderTop>
+      <HeaderTabs>
+        {["Documentation", "Changelog", "Help"].map((tab) => (
+          <Tab
+            key={tab}
+            $active={activeTab === tab}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </Tab>
+        ))}
+      </HeaderTabs>
+    </HeaderWrapper>
+  );
+}
+
+// ══════════════════════════════════════════════
+//  SIDEBAR COMPONENT
+// ══════════════════════════════════════════════
+function Sidebar() {
+  const { pathname } = useLocation();
+
+  return (
+    <SidebarWrapper>
+      {sidebarSections.map((section) => (
+        <SidebarSection key={section.heading}>
+          <SidebarHeading>{section.heading}</SidebarHeading>
+          {section.links.map((link) => {
+            const isActive = pathname === link.to;
+            return (
+              <SidebarStyledLink key={link.to} to={link.to} $active={isActive}>
+                <SidebarIcon $active={isActive}>{link.icon}</SidebarIcon>
+                <LabelSidebarText>{link.label}</LabelSidebarText>
+              </SidebarStyledLink>
+            );
+          })}
+        </SidebarSection>
+      ))}
+    </SidebarWrapper>
+  );
+}
+
+// ══════════════════════════════════════════════
+//  TOC SIDEBAR COMPONENT
+// ══════════════════════════════════════════════
 function TOCSidebar() {
   const { pathname } = useLocation();
   const [copied, setCopied] = useState(false);
   const [activeId, setActiveId] = useState(null);
 
-   const tocMap = {
+  const tocMap = {
     "/code-group": [
       { id: "overview", label: "Overview", level: "h2" },
       { id: "using-with-web-editor", label: "Using with Web Editor", level: "h2" },
@@ -109,48 +582,36 @@ function TOCSidebar() {
   const ITEM_HEIGHT = 30;
   const SVG_WIDTH = 14;
 
-  // Generate SVG path based on nesting levels (h2 = x:1, h3 = x:13)
   const generateIndicatorPath = useCallback(() => {
     if (!links) return "";
     const segments = [];
-    let y = 12; // starting offset
+    let y = 12;
 
     links.forEach((link, i) => {
       const x = link.level === "h2" ? 1 : 13;
       const nextLink = links[i + 1];
       const nextX = nextLink ? (nextLink.level === "h2" ? 1 : 13) : x;
 
-      // Top of this item
-      if (i === 0) {
-        segments.push(`M ${x} ${y}`);
-      }
+      if (i === 0) segments.push(`M ${x} ${y}`);
 
-      // Line down through this item
       const midY = y + 18;
       segments.push(`L ${x} ${midY}`);
 
-      // Transition to next item's x position
       y = midY + 12;
-      if (nextLink) {
-        segments.push(`L ${nextX} ${y}`);
-      }
+      if (nextLink) segments.push(`L ${nextX} ${y}`);
     });
 
     return segments.join(" ");
   }, [links]);
 
-  // Find active section index
   const activeIndex = links ? links.findIndex((l) => l.id === activeId) : -1;
 
-  // Intersection observer for active section tracking
   useEffect(() => {
     if (!links) return;
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries.filter((e) => e.isIntersecting);
-        if (visible.length > 0) {
-          setActiveId(visible[0].target.id);
-        }
+        if (visible.length > 0) setActiveId(visible[0].target.id);
       },
       { rootMargin: "-80px 0px -60% 0px", threshold: 0 }
     );
@@ -175,28 +636,26 @@ function TOCSidebar() {
   const activeTop = activeIndex >= 0 ? 12 + activeIndex * ITEM_HEIGHT : 0;
 
   return (
-    <aside className="toc-sidebar">
-      <div className="toc-copy-wrapper">
-        <div className="toc-copy-btn-group">
-          <button type="button" title="Copy page" className="toc-copy-btn" onClick={handleCopy}>
+    <TocSidebarWrapper>
+      <TocCopyWrapper>
+        <TocCopyBtnGroup>
+          <TocCopyBtn type="button" title="Copy page" onClick={handleCopy}>
             {copied ? <Check size={15} /> : <Copy size={15} />}
             <span>{copied ? "Copied!" : "Copy page"}</span>
-          </button>
-          <button type="button" className="toc-copy-dropdown">
+          </TocCopyBtn>
+          <TocCopyDropdown type="button">
             <ChevronDown size={14} />
-          </button>
-        </div>
-      </div>
+          </TocCopyDropdown>
+        </TocCopyBtnGroup>
+      </TocCopyWrapper>
 
-      <div className="toc-heading">
+      <TocHeadingRow>
         <AlignLeft size={16} />
         <span>On this page</span>
-      </div>
+      </TocHeadingRow>
 
-      <div className="toc-scroll-wrapper">
-        {/* SVG indicator with mask-based wavy line */}
+      <TocScrollWrapper>
         <svg
-          className="toc-indicator"
           width={SVG_WIDTH}
           height={totalHeight}
           viewBox={`0 0 ${SVG_WIDTH} ${totalHeight}`}
@@ -207,7 +666,6 @@ function TOCSidebar() {
           <mask id="toc-line-mask">
             <path d={svgPath} stroke="white" strokeWidth="1" fill="none" />
           </mask>
-          {/* Gray background line */}
           <rect
             width={SVG_WIDTH}
             height={totalHeight}
@@ -215,7 +673,6 @@ function TOCSidebar() {
             opacity="0.8"
             mask="url(#toc-line-mask)"
           />
-          {/* Active highlight */}
           <rect
             y={activeTop}
             width={SVG_WIDTH}
@@ -226,480 +683,47 @@ function TOCSidebar() {
           />
         </svg>
 
-        <nav className="toc-links">
+        <TocLinks>
           {links.map((link) => (
-            <a
+            <TocLinkItem
               key={link.id}
               href={`#${link.id}`}
-              className={`toc-link ${link.level === "h3" ? "toc-h3" : "toc-h2"} ${
-                activeId === link.id ? "toc-link-active" : ""
-              }`}
+              $active={activeId === link.id}
+              $level={link.level}
             >
               {link.label}
-            </a>
+            </TocLinkItem>
           ))}
-        </nav>
-      </div>
-    </aside>
-  );
-}
-function Header() {
-  return (
-    <header className="header">
-      <div className="header-top">
-        <span className="logo">
-          <img src="https://blob-cdn.documentation.ai/org-53a37986-2c9e-4094-b9e8-1e1ffae9e9ee/doc-b389b141-ae58-4fd5-91f9-6702fae9ac58/1767703565522-24h54tbc4tf-logo_light_mode.svg?auto=format%2Ccompress&w=1650&q=75" />
-        </span>
-        <div className="header-center">
-          <div className="search-box">
-            <div className="search-left">
-              <Search size={16} color="#4c4b4b" />
-              <span className="search-text">Search</span>
-            </div>
-            <span className="search-shortcut">Ctrl+K</span>
-          </div>
-          <button className="ask-ai-btn">
-            <Sparkles size={14} />
-            Ask AI
-          </button>
-        </div>
-        <div className="header-actions">
-          <span className="login-text">Login</span>
-          <button className="get-started-btn">Get Started →</button>
-          <Sun size={18} color="#999" />
-        </div>
-      </div>
-      <div className="header-tabs">
-        <span className="tab active-tab">Documentation</span>
-        <span className="tab">Changelog</span>
-        <span className="tab">Help</span>
-      </div>
-    </header>
+        </TocLinks>
+      </TocScrollWrapper>
+    </TocSidebarWrapper>
   );
 }
 
-function Sidebar() {
-  const { pathname } = useLocation();
-
-  return (
-    <aside className="sidebar">
-      {sidebarSections.map((section) => (
-        <div key={section.heading} className="sidebar-section">
-          <p className="sidebar-heading">{section.heading}</p>
-          {section.links.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={"sidebar-link" + (pathname === link.to ? " active" : "")}
-            >
-              <span className="sidebar-icon">{link.icon}</span>
-             <span className="label-sidebar-text">  {link.label}</span>
-            </Link>
-          ))}
-        </div>
-      ))}
-    </aside>
-  );
-}
-
+// ══════════════════════════════════════════════
+//  APP (ROOT)
+// ══════════════════════════════════════════════
 export default function App() {
+    const { mode } = useTheme(); // ✅ move hook here
+
   return (
     <BrowserRouter>
       <Header />
-      <div className="layout">
+      <LayoutWrapper mode={mode}>
         <Sidebar />
-        <main className="content">
+        <ContentArea>
           <Routes>
             <Route path="/introduction" element={<Introduction />} />
             <Route path="/core-concepts" element={<CoreConcepts />} />
             <Route path="/quickstart" element={<Quickstart />} />
-           <Route path="/videos-and-iframes" element={<VideosAndIframes />} />
+            <Route path="/videos-and-iframes" element={<VideosAndIframes />} />
             <Route path="/code-group" element={<CodeGroup />} />
             <Route path="/callout" element={<Callout />} />
-
             <Route path="*" element={<Navigate to="/introduction" />} />
           </Routes>
-        </main>
-                <TOCSidebar />
-      </div>
+        </ContentArea>
+        <TOCSidebar />
+      </LayoutWrapper>
     </BrowserRouter>
   );
 }
-
-// * {
-//   margin: 0;
-//   padding: 0;
-//   box-sizing: border-box;
-// }
-
-// body {
-//   font-family: "Inter", sans-serif;
-//   color: #0f0f0f;
-//   font-size: 14px;
-//   margin-bottom: 50px;
-//   margin-left: 40px;
-// }
-
-// /* ── Header ── */
-// .header {
-//   border-bottom: 1px solid #e8e8e8;
-//   position: sticky;
-//   top: 0;
-//   background: #ffffff;
-//   z-index: 10;
-//   margin-bottom: 5px;
-// }
-
-// .header-top {
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   padding: 18px 28px;
-// }
-
-// .logo img {
-//   height: 34px;
-// }
-
-// /* ── Search + Ask AI ── */
-// .header-center {
-//   display: flex;
-//   align-items: center;
-//   gap: 8px;
-//   margin-left: 150px;
-// }
-
-// .search-box {
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-//   width: 270px;
-//   border: 1px solid #ddd;
-//   border-radius: 8px;
-//   padding: 7px 12px;
-//   height:35px;
-// }
-
-// .search-left {
-//   display: flex;
-//   align-items: center;
-//   gap: 8px;
-// }
-
-// .search-text {
-//   color: #999;
-//   font-size: 15px;
-// }
-
-// .search-shortcut {
-//   font-size: 14px;
-//   background: #f3f3f3;
-//   padding: 2px 8px;
-//   border-radius: 4px;
-//   color: #636161;
-// }
-
-// .ask-ai-btn {
-//   display: flex;
-//   align-items: center;
-//   gap: 6px;
-//   border: 1px solid #ddd;
-//   border-radius: 8px;
-//   padding: 7px 12px;
-//   background: white;
-//   font-size: 14px;
-//   cursor: pointer;
-//   color: #333;
-//   height:40px;
-// }
-
-// /* ── Right Actions ── */
-// .header-actions {
-//   display: flex;
-//   align-items: center;
-//   gap: 22px;
-//   margin-right: 80px;
-// }
-
-// .login-text {
-//   font-size: 16px;
-//   color:rgb(65, 64, 64);
-// }
-
-// .get-started-btn {
-//   background: #0f0f0f;
-//   color: white;
-//   border: none;
-//   border-radius: 20px;
-//   padding: 8px 18px;
-//   font-size: 15px;
-//   cursor: pointer;
-// }
-
-// /* ── Tabs ── */
-// .header-tabs {
-//   display: flex;
-//   gap: 24px;
-//   padding: 0 28px 12px;
-// }
-
-// .tab {
-//   font-size: 14px;
-//   color: #6b6b6b;
-//   cursor: pointer;
-//   padding-bottom: 8px;
-//   font-weight: 400;
-// }
-
-// .active-tab {
-//   color: #0f0f0f;
-//   font-weight: 500;
-//   border-bottom: 2px solid #0f0f0f;
-// }
-
-// /* ── Layout ── */
-// .layout {
-//     display: flex;
-//     position: fixed;
-//     top: 105px;
-//     left: 0;
-//     right: 0;
-//     bottom: 0;
-//     max-width: 1560px;
-//     margin: 0 auto;
-// }
-
-// /* ── Sidebar ── */
-// .sidebar {
-//     width: 260px;
-//     min-width: 260px;
-//     border-right: 1px solid #e8e8e8;
-//     padding: 24px 16px;
-//     overflow-y: auto;
-//     scrollbar-width: thin;
-//     scrollbar-color: #eaeaea transparent;
-// }
-
-// .sidebar-heading {
-//   font-size: 14px;
-//   font-weight: 600;
-//   color: #0f0f0f;
-//   margin-bottom: 10px;
-//   padding: 0 12px;
-// }
-
-// .sidebar-link {
-//     display: flex;
-//     align-items: center;
-//     gap: 10px;
-//     padding: 8px 12px;
-//     font-size: 15px;
-//     color: #444;
-//     text-decoration: none;
-//     border-radius: 6px;
-//     line-height: 1.5;
-// }
-
-// .sidebar-link:hover {
-//   background: #f5f5f5;
-// }
-
-// .sidebar-link.active {
-//   background: #ebebeb;
-//   font-weight: 500;
-//   color: #0f0f0f;
-// }
-
-// .sidebar-section {
-//     margin-bottom: 24px;
-// }
-
-// .sidebar-icon {
-//     display: flex;
-//     align-items: center;
-//     color: #999;
-//     flex-shrink: 0;
-//     font-size: 11px;
-// }
-
-// .label-sidebar-text {
-//   font-size: 13px;
-// }
-
-// .sidebar-link.active .sidebar-icon {
-//     color: #0f0f0f;
-// }
-
-// /* ── Content ── */
-// .content {
-//     flex: 1;
-//     padding: 32px 48px;
-//     overflow-y: auto;
-//     background-color: #ffffff;
-//     scrollbar-width: none;
-//     scrollbar-color: #dadada transparent;
-// }
-
-
-// /* ══════════════════════════════════════════════
-//    Table of Contents — thin line scroll indicator
-//    ══════════════════════════════════════════════ */
-
-// .toc-sidebar {
-//     width: 280px;
-//     min-width: 280px;
-//     margin-right: 32px;
-//     padding: 40px 0;
-//     display: flex;
-//     flex-direction: column;
-//     height: 100%;
-//     background: transparent;
-//       overflow: hidden;          /* add this */
-
-// }
-
-// /* Copy button */
-// .toc-copy-wrapper {
-//     margin-bottom: 20px;
-// }
-
-// .toc-copy-btn-group {
-//     display: inline-flex;
-//     align-items: center;
-//     border: 1px solid #e5e5e5;
-//     border-radius: 8px;
-//     overflow: hidden;
-//     background: transparent;
-// }
-
-// .toc-copy-btn {
-//     display: inline-flex;
-//     align-items: center;
-//     gap: 8px;
-//     padding: 0 14px;
-//     height: 36px;
-//     border: none;
-//     background: transparent;
-//     color: #3c3c3c;
-//     font-size: 13px;
-//     font-weight: 500;
-//     cursor: pointer;
-//     font-family: inherit;
-//     transition: background 0.15s;
-// }
-
-// .toc-copy-btn:hover {
-//     background: #f5f5f5;
-// }
-
-// .toc-copy-dropdown {
-//     display: inline-flex;
-//     align-items: center;
-//     justify-content: center;
-//     width: 34px;
-//     height: 36px;
-//     border: none;
-//     border-left: 1px solid #e5e5e5;
-//     background: transparent;
-//     color: #3c3c3c;
-//     cursor: pointer;
-//     transition: background 0.15s;
-// }
-
-// .toc-copy-dropdown:hover {
-//     background: #f5f5f5;
-// }
-
-// /* Heading */
-// .toc-heading {
-//     display: flex;
-//     align-items: center;
-//     gap: 8px;
-//     font-size: 14px;
-//     font-weight: 600;
-//     color: #1a1a1a;
-//     margin-bottom: 8px;
-// }
-
-// /* Scroll wrapper */
-// .toc-scroll-wrapper {
-//     position: relative;
-//     flex: 1;
-//     min-height: 0;
-//       scrollbar-width: none;
-
-// }
-
-// /* Thin track line (light gray) */
-// .toc-track-line {
-//     position: absolute;
-//     left: 0;
-//     top: 0;
-//     bottom: 0;
-//     width: 2px;
-//     background: #ebebeb;
-//     border-radius: 2px;
-//     z-index: 1;
-//       scrollbar-width: none;
-
-// }
-
-// /* Thin thumb line (dark, moves with scroll) */
-// .toc-thumb-line {
-//     position: absolute;
-//     left: 0;
-//     width: 2px;
-//     background: #1a1a1a;
-//     border-radius: 2px;
-//     z-index: 2;
-//     transition: top 0.08s ease-out;
-//       scrollbar-width: none;
-
-// }
-
-// /* Hidden native scrollbar */
-// .toc-scroll-container {
-//     max-height: 100%;
-//     overflow-y: auto;
-//     padding-left: 16px;
-//     scrollbar-width: none;
-//     /* -ms-overflow-style: none; */
-// }
-
-// .toc-scroll-container::-webkit-scrollbar {
-//     display: none;
-// }
-
-// /* Links */
-// .toc-links {
-//     display: flex;
-//     flex-direction: column;
-// }
-
-// .toc-link {
-//     display: block;
-//     font-size: 14px;
-//     color: rgba(89, 89, 89, 0.9);
-//     text-decoration: none;
-//     padding: 7px 0;
-//     transition: color 0.15s;
-//     line-height: 1.4;
-//     white-space: nowrap;
-//     overflow: hidden;
-//     text-overflow: ellipsis;
-// }
-
-// .toc-link:hover {
-//     color: #1a1a1a;
-// }
-
-// .toc-h2 {
-//     padding-left: 0;
-// }
-
-// .toc-h3 {
-//     padding-left: 12px;
-// }
-// .toc-sidebar::-webkit-scrollbar {
-//     display: none;
-// }
