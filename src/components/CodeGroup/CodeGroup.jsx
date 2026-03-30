@@ -7,7 +7,7 @@ import ShikiCodeBlock, { ShikiBlock } from "../../Shiki-CodeBlock/CodeBlock";
 const DocPage = styled.div`
   max-width: 672px;
   font-family: "Inter", system-ui, -apple-system, sans-serif;
-  color: rgb(55, 65, 81);
+  color: var(--text-secondary);
   font-size: 16px;
   line-height: 28px;
   margin-left: 40px;
@@ -16,7 +16,7 @@ const DocPage = styled.div`
   h2 {
     font-size: 22px;
     font-weight: 600;
-    color: #0f0f0f;
+    color: var(--text);
     margin-top: 40px;
     margin-bottom: 16px;
     line-height: 1.3;
@@ -25,16 +25,16 @@ const DocPage = styled.div`
   h3 {
     font-size: 17px;
     font-weight: 600;
-    color: #0f0f0f;
+    color: var(--text);
     margin-top: 28px;
     margin-bottom: 12px;
     line-height: 1.4;
   }
 
   p {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 28px;
-    color: rgb(55, 65, 81);
+    color: var(--text-secondary);
     margin-bottom: 12px;
   }
 
@@ -58,7 +58,7 @@ const DocPage = styled.div`
   li {
     font-size: 16px;
     line-height: 28px;
-    color: rgb(55, 65, 81);
+    color: var(--text-secondary);
     margin-bottom: 6px;
   }
 
@@ -69,31 +69,32 @@ const DocPage = styled.div`
   code {
     font-family: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, Consolas, monospace;
     font-size: 14px;
-    background-color: rgba(175, 184, 193, 0.2);
+    background-color: var(--code-bg);
     padding: 2px 6px;
     border-radius: 5px;
-    color: #0f0f0f;
+    color: var(--text);
   }
 
   kbd {
     font-family: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, Consolas, monospace;
     font-size: 13px;
-    background: lch(97.26% 0.52 290.36);
-    border: 1px solid #ddd;
+    background: var(--shortcut-bg);
+    border: 1px solid var(--border);
     padding: 1px 6px;
     border-radius: 4px;
+    color: var(--text);
   }
 
   strong {
     font-weight: 600;
-    color: #0f0f0f;
+    color: var(--text);
   }
 `;
 
 const PageGroupLabel = styled.span`
   font-size: 15px;
   font-weight: 500;
-  color: #6b6b6b;
+  color: var(--icon-color);
   text-transform: capitalize;
   display: block;
   margin-bottom: 14px;
@@ -102,15 +103,15 @@ const PageGroupLabel = styled.span`
 const PageTitle = styled.h1`
   font-size: 30px;
   font-weight: 600;
-  color: #0f0f0f;
+  color: var(--text);
   margin-bottom: 10px;
   letter-spacing: -0.5px;
   line-height: 1.2;
 `;
 
 const PageDesc = styled.p`
-  && {
-    color: rgb(55, 65, 81);
+  {
+    color: var(--text-secondary);
     font-size: 16px;
     line-height: 28px;
     margin-bottom: 32px;
@@ -122,7 +123,7 @@ const InfoNoteBox = styled.div`
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  background: #f7f8f8;
+  background: var(--info-bg);
   border-radius: 12px;
   padding: 12px 16px;
   margin: 24px 0;
@@ -131,12 +132,12 @@ const InfoNoteBox = styled.div`
     margin: 0;
     font-size: 15px;
     line-height: 24px;
-    color: #4b4c4d;
+    color: var(--text-secondary);
   }
 `;
 
 const InfoNoteIcon = styled.span`
-  color: #858789;
+  color: var(--icon-color);
   font-size: 10px;
   flex-shrink: 0;
   margin-top: 4px;
@@ -162,29 +163,29 @@ const VideoIframeImage = styled.img`
 
 const AltTextCaption = styled.span`
   font-size: 14px;
-  color: #5c5a5a;
+  color: var(--icon-color);
   margin: 5px 0 5px 200px;
   display: block;
 `;
 
 // ── Links ─────────────────────────────────────────────────────────────────────
 const CodeGroupsLink = styled.a`
-  color: #343131;
+  color: var(--text);
   font-weight: bold;
 `;
 
 const FencedCodeLink = styled.a`
-  color: #343131;
+  color: var(--text);
   font-weight: bold;
 `;
 
 // ── Attribute cards ───────────────────────────────────────────────────────────
 const AttributeCard = styled.div`
-  border-top: 1px solid #eaeaea;
+  border-top: 1px solid var(--border);
   padding: 14px 0;
 
   &:last-child {
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid var(--border);
   }
 `;
 
@@ -209,20 +210,20 @@ const AttributePath = styled.span`
 const AttributeName = styled.span`
   font-weight: 700;
   font-size: 15px;
-  color: #1a1a1a;
+  color: var(--text);
   font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
 `;
 
 const AttributeType = styled.span`
   font-size: 13px;
-  color: #6b7280;
+  color: var(--icon-color);
 `;
 
 const AttributeDesc = styled.p`
   && {
     margin: 0;
     font-size: 15px;
-    color: #374151;
+    color: var(--text-secondary);
     line-height: 1.7;
   }
 `;
@@ -230,16 +231,16 @@ const AttributeDesc = styled.p`
 // ── Code group tabs ───────────────────────────────────────────────────────────
 const ShikiGroupWrapper = styled.div`
   margin: 16px 0;
-  border: 1px solid #eaeaea;
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background-color: rgba(241, 241, 241, 0.8);
+  background-color: var(--info-bg);
   padding: 0 4px 4px 4px;
 
   ${ShikiBlock} {
-    border: 1px solid #eaeaea;
+    border: 1px solid var(--border);
     border-radius: 12px;
     margin: 0;
-    background-color: #fff;
+    background-color: var(--bg);
   }
 `;
 
@@ -256,14 +257,14 @@ const ShikiGroupTab = styled.button`
   font-size: 13px;
   font-family: "Inter", system-ui, -apple-system, sans-serif;
   font-weight: 500;
-  color: ${({ $active }) => ($active ? "#1a1a1a" : "#6b7280")};
+  color: ${({ $active }) => ($active ? "var(--text)" : "var(--icon-color)")};
   background: none;
   border: none;
-  border-bottom: ${({ $active }) => ($active ? "2px solid #1a1a1a" : "2px solid transparent")};
+  border-bottom: ${({ $active }) => ($active ? "2px solid var(--text)" : "2px solid transparent")};
   cursor: pointer;
 
   &:hover {
-    color: #374151;
+    color: var(--text-secondary);
   }
 `;
 
@@ -322,7 +323,7 @@ function sayHello() {
       </PageDesc>
 
       {/* ── Overview ── */}
-      <h2>Overview</h2>
+      <h2 id="overview">Overview</h2>
       <ShikiCodeBlock
         language="typescript"
         wrap={true}
@@ -356,10 +357,10 @@ function sayHello() {
       </p>
 
       {/* ── Using with Web Editor ── */}
-      <h2>Using with Web Editor</h2>
+      <h2 id="using-with-web-editor">Using with Web Editor</h2>
       <p>In the Web Editor, use the slash menu to insert and manage code blocks and groups.</p>
 
-      <h3>Insert a code block</h3>
+      <h3 id="insert-a-code-block">Insert a code block</h3>
       <ol>
         <li>Place your cursor on a new line.</li>
         <li>Type <kbd>/</kbd> and select <strong>Code Block</strong>.</li>
@@ -368,7 +369,8 @@ function sayHello() {
       <p>Use the language dropdown on the top-right of the block to pick the correct language. This controls <strong>syntax highlighting</strong> and the copy behavior.</p>
       <VideoIframeImage src="https://blob-cdn.documentation.ai/org-53a37986-2c9e-4094-b9e8-1e1ffae9e9ee/doc-b389b141-ae58-4fd5-91f9-6702fae9ac58/1767254413848-dj42wgaz18u-pasted-image-1767254412456.png?auto=format%2Ccompress&w=560&q=75" />
       <AltTextCaption>Code Block in Web Editor</AltTextCaption>
-      <h3>Insert a code group</h3>
+
+      <h3 id="insert-a-code-group">Insert a code group</h3>
       <ol>
         <li>Place your cursor on a new line.</li>
         <li>Type <kbd>/</kbd> and select <strong>Code Group</strong>.</li>
@@ -395,10 +397,10 @@ function sayHello() {
       </InfoNoteBox>
 
       {/* ── Using with Code Editor ── */}
-      <h2>Using with Code Editor</h2>
+      <h2 id="using-with-code-editor">Using with Code Editor</h2>
       <p>When working in a code editor, you write code blocks and code groups with standard fenced code syntax and the <code>&lt;CodeGroup&gt;</code> component.</p>
 
-      <h3>Single code block</h3>
+      <h3 id="single-code-block">Single code block</h3>
       <p>Use <FencedCodeLink href="www.facebook.com" target='_blank'><u>fenced code blocks</u></FencedCodeLink> with three backticks and a language identifier:</p>
       <ShikiCodeBlock
         language="typescript"
@@ -417,7 +419,7 @@ const apiCall = async () => {
 \`\`\``}
       />
 
-      <h3>CodeGroup with multiple languages</h3>
+      <h3 id="codegroup-with-multiple-languages">CodeGroup with multiple languages</h3>
       <p>Wrap multiple fenced code blocks in a <code>&lt;CodeGroup&gt;</code> component to render them as tabs:</p>
       <ShikiCodeBlock
         language="tsx"
@@ -453,10 +455,10 @@ curl -X POST https://api.example.com/docs \\
       </ul>
 
       {/* ── Advanced options ── */}
-      <h2>Advanced options</h2>
+      <h2 id="advanced-options">Advanced options</h2>
       <p>Use these attributes and patterns to fine-tune how code blocks and groups render.</p>
 
-      <h3>Line highlighting</h3>
+      <h3 id="line-highlighting">Line highlighting</h3>
       <p>Use the <code>highlight</code> prop on a fenced code block to emphasize specific lines:</p>
       <ShikiCodeBlock
         language="javascript"
@@ -477,7 +479,7 @@ sayHello();
 \`\`\``}
       />
 
-      <h3>Line focus</h3>
+      <h3 id="line-focus">Line focus</h3>
       <p>Use the <code>focus</code> prop to dim non-focused lines and draw attention to a subset of the code:</p>
       <ShikiCodeBlock
         language="javascript"
@@ -498,7 +500,7 @@ sayHello();
 \`\`\``}
       />
 
-      <h3>Line numbers</h3>
+      <h3 id="line-numbers">Line numbers</h3>
       <p>Combine highlighting or focus with line numbers using <code>show-lines={"{true}"}</code>:</p>
       <ShikiCodeBlock
         language="typescript"
@@ -517,7 +519,7 @@ interface User {
 \`\`\``}
       />
 
-      <h3>Wrap long lines</h3>
+      <h3 id="wrap-long-lines">Wrap long lines</h3>
       <p>Use the <code>wrap</code> parameter to control whether long lines stay on a single row with horizontal scrolling or automatically wrap onto the next visual line inside the code block.</p>
       <p>You can enable wrapping in several equivalent ways on a fenced block: <code>wrap</code>, <code>wrap="true"</code>, <code>wrap={"{true}"}</code>.</p>
       <ShikiCodeBlock
@@ -550,7 +552,7 @@ const longLine = "This line is highlighted, shows a line number, and wraps inste
         <li>Avoid <code>wrap</code> when alignment and spacing matter (for example, formatted logs, tables, or columns rendered in code), where wrapping can make structure harder to see.</li>
       </ul>
 
-      <h3>CodeGroup options</h3>
+      <h3 id="codegroup-options">CodeGroup options</h3>
       <p><code>&lt;CodeGroup&gt;</code> supports the same block-level props (for example, <code>highlight</code>, <code>focus</code>, <code>show-lines</code>) inside each tabbed code block.</p>
       <ShikiCodeBlock
         language="tsx"
@@ -629,7 +631,7 @@ example = "This tab shows: python"
 </CodeGroup>`}
       />
 
-      <h3>Auto-detected tabs</h3>
+      <h3 id="auto-detected-tabs">Auto-detected tabs</h3>
       <p>Without the <code>tabs</code> attribute, CodeGroup automatically uses language identifiers as tab names:</p>
       <ShikiGroupWrapper>
         <ShikiGroupTabs>
@@ -660,7 +662,7 @@ example = "This tab shows: python"
 </CodeGroup>`}
       />
 
-      <h3>CodeGroup with highlighting and focus</h3>
+      <h3 id="codegroup-with-highlighting-and-focus">CodeGroup with highlighting and focus</h3>
       <p>Line highlighting and focus effects work within CodeGroup tabs:</p>
       <ShikiGroupWrapper>
         <ShikiGroupTabs>
@@ -699,7 +701,7 @@ function sayHello() {
 </CodeGroup>`}
       />
 
-      <h3>Nested code examples (four backticks)</h3>
+      <h3 id="nested-code-examples-four-backticks">Nested code examples (four backticks)</h3>
       <p>When you need to show code that itself contains code fences, wrap the outer block in four backticks:</p>
       <ShikiCodeBlock
         language="typescript"
@@ -711,7 +713,7 @@ function calculateTotal(price: number, tax: number): number {
       />
 
       {/* ── Attribute reference ── */}
-      <h2>Attribute reference</h2>
+      <h2 id="attribute-reference">Attribute reference</h2>
       <p>Use these attributes on fenced code blocks or <code>&lt;CodeGroup&gt;</code>:</p>
 
       <AttributeCard>

@@ -6,8 +6,8 @@ import ShikiCodeBlock from "../../Shiki-CodeBlock/CodeBlock";
 const DocPage = styled.div`
   max-width: 672px;
   font-family: "Inter", system-ui, -apple-system, sans-serif;
-  color: rgb(55, 65, 81);
-  font-size: 16px;
+  color: var(--text-secondary);
+  font-size: 15px;
   line-height: 28px;
   margin-left: 40px;
   margin-bottom: 40px;
@@ -15,7 +15,7 @@ const DocPage = styled.div`
   h2 {
     font-size: 22px;
     font-weight: 600;
-    color: #0f0f0f;
+    color: var(--text);
     margin-top: 40px;
     margin-bottom: 16px;
     line-height: 1.3;
@@ -24,19 +24,20 @@ const DocPage = styled.div`
   h3 {
     font-size: 17px;
     font-weight: 600;
-    color: #0f0f0f;
+    color: var(--text);
     margin-top: 28px;
     margin-bottom: 12px;
     line-height: 1.4;
   }
 
-  p {
-    font-size: 14px;
+  && p {
     line-height: 28px;
-    color: rgb(55, 65, 81);
+    color: var(--text-secondary);
     margin-bottom: 12px;
-  }
+  font-size:16px;
+    }
 
+  
   ul {
     list-style-type: disc;
     padding-left: 24px;
@@ -57,7 +58,7 @@ const DocPage = styled.div`
   li {
     font-size: 16px;
     line-height: 28px;
-    color: rgb(55, 65, 81);
+    color: var(--text-secondary);
     margin-bottom: 6px;
   }
 
@@ -68,31 +69,32 @@ const DocPage = styled.div`
   code {
     font-family: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, Consolas, monospace;
     font-size: 14px;
-    background-color: rgba(175, 184, 193, 0.2);
+    background-color: var(--code-bg);
     padding: 2px 6px;
     border-radius: 5px;
-    color: #0f0f0f;
+    color: var(--text);
   }
 
   kbd {
     font-family: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, Consolas, monospace;
     font-size: 13px;
-    background: lch(97.26% 0.52 290.36);
-    border: 1px solid #ddd;
+    background: var(--shortcut-bg);
+    border: 1px solid var(--border);
     padding: 1px 6px;
     border-radius: 4px;
+    color: var(--text);
   }
 
   strong {
     font-weight: 600;
-    color: #0f0f0f;
+    color: var(--text);
   }
 `;
 
 const PageGroupLabel = styled.span`
   font-size: 15px;
   font-weight: 500;
-  color: #6b6b6b;
+  color: var(--icon-color);
   text-transform: capitalize;
   display: block;
   margin-bottom: 14px;
@@ -101,7 +103,7 @@ const PageGroupLabel = styled.span`
 const PageTitle = styled.h1`
   font-size: 30px;
   font-weight: 600;
-  color: #0f0f0f;
+  color: var(--text);
   margin-bottom: 10px;
   letter-spacing: -0.5px;
   line-height: 1.2;
@@ -109,7 +111,7 @@ const PageTitle = styled.h1`
 
 const PageDesc = styled.p`
   && {
-    color: rgb(55, 65, 81);
+    color: var(--text-secondary);
     font-size: 16px;
     line-height: 28px;
     margin-bottom: 32px;
@@ -121,7 +123,7 @@ const InfoNoteBox = styled.div`
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  background: #f7f8f8;
+  background: var(--info-bg);
   border-radius: 12px;
   padding: 12px 16px;
   margin: 24px 0;
@@ -130,12 +132,12 @@ const InfoNoteBox = styled.div`
     margin: 0;
     font-size: 15px;
     line-height: 24px;
-    color: #4b4c4d;
+    color: var(--text-secondary);
   }
 `;
 
 const InfoNoteIcon = styled.span`
-  color: #858789;
+  color: var(--icon-color);
   font-size: 10px;
   flex-shrink: 0;
   margin-top: 4px;
@@ -167,7 +169,7 @@ const VideoIframeImage = styled.img`
 const VideoAltText = styled.p`
   && {
     margin-left: 70px;
-    color: #646363;
+    color: var(--icon-color);
     font-size: 13.5px;
   }
 `;
@@ -175,25 +177,25 @@ const VideoAltText = styled.p`
 // ── Inline code span for component names in headings ──────────────────────────
 const VideoIframeCode = styled.span`
   font-weight: normal;
-  background-color: rgba(227, 226, 224, 0.5);
+  background-color: var(--code-bg);
   border-radius: 4px;
   padding: 2px 5px;
   font-size: 14px;
   font-family: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, SFMono-Regular, Consolas, monospace;
-  color: #444141;
+  color: var(--text-secondary);
   letter-spacing: -0.2px;
 `;
 
 // ── Links ─────────────────────────────────────────────────────────────────────
 const VideoFramesLink = styled.a`
   font-weight: bold;
-  color: #343131;
+  color: var(--text);
   text-decoration: none;
   ${({ $withMargin }) => $withMargin && `margin-left: 10px;`}
 `;
 
 const CodeGroupsLink = styled.a`
-  color: #343131;
+  color: var(--text);
   font-weight: bold;
 `;
 
@@ -202,17 +204,17 @@ const CopyBtn = styled.button`
   position: absolute;
   top: 8px;
   right: 8px;
-  background: white;
+  background: var(--bg);
   border: none;
   padding: 6px;
   border-radius: 6px;
   cursor: pointer;
-  color: #666;
+  color: var(--icon-color);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 
   &:hover {
-    color: #0f0f0f;
-    background: #f5f5f5;
+    color: var(--text);
+    background: var(--sidebar-hover);
   }
 `;
 
@@ -334,11 +336,8 @@ const VideosAndIframes = () => {
       <h2 id="using-with-code-editor">Using with Code Editor</h2>
       <p>In the Code Editor, you work directly in MDX using the <code>&lt;Video&gt;</code> and <code>&lt;Iframe&gt;</code> components.</p>
 
-      <h3><VideoIframeCode>&lt;Video&gt;</VideoIframeCode> component (iframe mode)</h3>
-      <p>Use iframe mode for platforms that provide an embed URL, such as YouTube, Vimeo, Loom, or Wistia.</p>
-        <CopyBtn onClick={() => handleCopy(videoIframeCode)}>
-          {/* <Copy size={14} /> */}
-        </CopyBtn>
+<h3 id="video-iframe-mode"><VideoIframeCode>&lt;Video&gt;</VideoIframeCode> component (iframe mode)</h3>      <p>Use iframe mode for platforms that provide an embed URL, such as YouTube, Vimeo, Loom, or Wistia.</p>
+      
         <ShikiCodeBlock
           language="tsx"
           code={videoIframeCode}
@@ -356,9 +355,7 @@ const VideosAndIframes = () => {
 
       <h3 id="video-html5-mode"><VideoIframeCode>&lt;Video&gt;</VideoIframeCode> component (HTML5 mode)</h3>
       <p>Use HTML5 mode for self-hosted video files, with native browser controls.</p>
-        <CopyBtn onClick={() => handleCopy(videoHtml5Code)}>
-          {/* <Copy size={14} /> */}
-        </CopyBtn>
+       
         <ShikiCodeBlock
           language="tsx"
           code={videoHtml5Code}

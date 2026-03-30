@@ -1,17 +1,48 @@
-// Replace your TableOfContents function in App.jsx with this:
-
-import { AlignLeft, Copy, Check, ChevronDown } from "lucide-react";
-import { useState, useRef, useEffect, useCallback } from "react";
-
-function TOCSidebar() {
+import React, { useEffect, useState } from 'react'
+import "./index.css"
+import {  toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Copy, ChevronDown, ExternalLink, ArrowUpRight, Server } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+const TOCSidebar = () => {
   const { pathname } = useLocation();
-  const [copied, setCopied] = useState(false);
-  const scrollRef = useRef(null);
-  const [thumbTop, setThumbTop] = useState(0);
-  const [thumbHeight, setThumbHeight] = useState(0);
-  const [showThumb, setShowThumb] = useState(false);
+  const[active,setActive]=useState(null);
+  const [copied,setCopied]=useState(false)
+  const [showDropdown, setShowDropdown] = useState(false);
 
-  const tocMap = {
+useEffect(() => {
+  if (!showDropdown) return;
+
+  const handleClick = () => {
+    setShowDropdown(false);
+  };
+
+ const timer = setTimeout(() => {
+    document.addEventListener('click', handleClick);
+  }, 0);  return () => 
+    {
+      document.removeEventListener('click', handleClick)
+      clearInterval(timer)
+    };
+}, [showDropdown]);
+const toggleModal = () => {
+  setShowDropdown((prev) => !prev);
+};
+    const tocMap = {
+    "/videos-and-iframes": [
+      { id: "overview", label: "Overview", level: "h2" },
+      { id: "using-with-web-editor", label: "Using with Web Editor", level: "h2" },
+      { id: "insert-a-video-or-iframe", label: "Insert a video or iframe", level: "h3" },
+      { id: "align-and-resize", label: "Align and resize", level: "h3" },
+      { id: "using-with-code-editor", label: "Using with Code Editor", level: "h2" },
+      { id: "video-iframe-mode", label: "<Video> (iframe mode)", level: "h3" },
+      { id: "video-html5-mode", label: "<Video> (HTML5 mode)", level: "h3" },
+      { id: "iframe-component", label: "<Iframe> component", level: "h3" },
+      { id: "advanced-options", label: "Advanced options", level: "h2" },
+      { id: "platform-support", label: "Platform support", level: "h3" },
+      { id: "accessibility", label: "Accessibility and layout", level: "h3" },
+      { id: "security", label: "Security considerations", level: "h3" },
+    ],
     "/code-group": [
       { id: "overview", label: "Overview", level: "h2" },
       { id: "using-with-web-editor", label: "Using with Web Editor", level: "h2" },
@@ -31,20 +62,6 @@ function TOCSidebar() {
       { id: "nested-code-examples-four-backticks", label: "Nested code examples (four backticks)", level: "h3" },
       { id: "attribute-reference", label: "Attribute reference", level: "h2" },
     ],
-    "/videos-and-iframes": [
-      { id: "overview", label: "Overview", level: "h2" },
-      { id: "using-with-web-editor", label: "Using with Web Editor", level: "h2" },
-      { id: "insert-a-video-or-iframe", label: "Insert a video or iframe", level: "h3" },
-      { id: "align-and-resize", label: "Align and resize", level: "h3" },
-      { id: "using-with-code-editor", label: "Using with Code Editor", level: "h2" },
-      { id: "video-iframe-mode", label: "<Video> (iframe mode)", level: "h3" },
-      { id: "video-html5-mode", label: "<Video> (HTML5 mode)", level: "h3" },
-      { id: "iframe-component", label: "<Iframe> component", level: "h3" },
-      { id: "advanced-options", label: "Advanced options", level: "h2" },
-      { id: "platform-support", label: "Platform support", level: "h3" },
-      { id: "accessibility", label: "Accessibility and layout", level: "h3" },
-      { id: "security", label: "Security considerations", level: "h3" },
-    ],
     "/callout": [
       { id: "overview", label: "Overview", level: "h2" },
       { id: "using-with-web-editor", label: "Using with Web Editor", level: "h2" },
@@ -52,103 +69,132 @@ function TOCSidebar() {
       { id: "attributes", label: "Attributes", level: "h2" },
       { id: "advanced-options", label: "Advanced options", level: "h2" },
     ],
+    "/mermaid":[
+       { id: "overview", label: "Overview", level: "h2" },
+  { id: "using-with-web-editor", label: "Using with Web Editor", level: "h2" },
+  { id: "using-with-code-editor", label: "Using with Code Editor", level: "h2" },
+
+  { id: "basic-syntax", label: "Basic Syntax", level: "h3" },
+  { id: "zoom-controls", label: "Zoom controls", level: "h3" },
+
+  { id: "advanced-options", label: "Advanced Options", level: "h2" },
+
+  { id: "diagram-types", label: "Diagram types:", level: "h3" },
+  { id: "flowcharts", label: "Flowcharts", level: "h3" },
+  { id: "sequence-diagrams", label: "Sequence diagrams", level: "h3" },
+  { id: "class-diagrams", label: "Class diagrams", level: "h3" },
+  { id: "state-diagrams", label: "State diagrams", level: "h3" },
+  { id: "entity-relationship-diagrams", label: "Entity relationship diagrams", level: "h3" },
+  { id: "gantt-charts", label: "Gantt charts", level: "h3" },
+  { id: "git-graphs", label: "Git graphs", level: "h3" },
+
+  { id: "graph-directions", label: "Graph directions:", level: "h3" },
+  { id: "node-shapes", label: "Node shapes", level: "h3" },
+  { id: "arrow-types", label: "Arrow types", level: "h3" },
+  { id: "theme-support", label: "Theme support", level: "h3" },
+  { id: "syntax", label: "Syntax", level: "h3" },
+  { id: "best-practices", label: "Best practices", level: "h3" },
+    ],
+    "/param-field" : [
+  { id: "overview", label: "Overview", level: "h2" },
+  { id: "using-with-web-editor", label: "Using with Web Editor", level: "h2" },
+
+  { id: "add-a-paramfield-block", label: "Add a ParamField block", level: "h3" },
+  { id: "edit-parameter-metadata", label: "Edit parameter metadata", level: "h3" },
+  { id: "edit-the-description", label: "Edit the description", level: "h3" },
+
+  { id: "using-with-code-editor", label: "Using with Code Editor", level: "h2" },
+
+  { id: "basic-syntax", label: "Basic syntax", level: "h3" },
+  { id: "hide-location-badge", label: "Hide location badge", level: "h3" },
+
+  { id: "advanced-options", label: "Advanced options", level: "h2" },
+  { id: "attributes", label: "Attributes", level: "h3" },
+],
   };
+    const arr = tocMap[pathname];
 
-  const links = tocMap[pathname];
-
-  const updateThumb = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const { scrollTop, scrollHeight, clientHeight } = el;
-    if (scrollHeight <= clientHeight) {
-      setShowThumb(false);
-      return;
+    const handleCopy=()=>{
+        navigator.clipboard.writeText("Hello World ");
+        setCopied(true)
+        setTimeout(()=> setCopied(false),1500)
+      toast.success("Copied to clipboard ✅");
     }
-    setShowThumb(true);
-    const ratio = clientHeight / scrollHeight;
-    const h = Math.max(ratio * clientHeight, 28);
-    const maxTop = clientHeight - h;
-    const top = (scrollTop / (scrollHeight - clientHeight)) * maxTop;
-    setThumbHeight(h);
-    setThumbTop(top);
-  }, []);
 
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    updateThumb();
-    el.addEventListener("scroll", updateThumb, { passive: true });
-    window.addEventListener("resize", updateThumb);
-    return () => {
-      el.removeEventListener("scroll", updateThumb);
-      window.removeEventListener("resize", updateThumb);
-    };
-  }, [links, updateThumb]);
-
-  const handleCopy = () => {
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1800);
-  };
-
-  if (!links) return null;
-
+    
   return (
-    <aside className="toc-sidebar">
-      {/* Copy page button */}
-      <div className="toc-copy-wrapper">
-        <div className="toc-copy-btn-group">
-          <button
-            type="button"
-            title="Copy page"
-            className="toc-copy-btn"
-            onClick={handleCopy}
-          >
-            {copied ? <Check size={15} /> : <Copy size={15} />}
-            <span>{copied ? "Copied!" : "Copy page"}</span>
-          </button>
-          <button type="button" className="toc-copy-dropdown">
-            <ChevronDown size={14} />
-          </button>
-        </div>
-      </div>
+    <div className='toc-sidebar-container'>
 
-      {/* On this page heading */}
-      <div className="toc-heading">
-        <AlignLeft size={16} />
-        <span>On this page</span>
-      </div>
-
-      {/* Scrollable TOC with thin line indicator */}
-      <div className="toc-scroll-wrapper">
-        {/* Track line (light gray background) */}
-        <div className="toc-track-line" />
-
-        {/* Thumb line (dark, moves with scroll) */}
-        {showThumb && (
-          <div
-            className="toc-thumb-line"
-            style={{
-              top: thumbTop,
-              height: thumbHeight,
-            }}
-          />
-        )}
-
-        {/* Scroll container — native scrollbar hidden */}
-        <div className="toc-scroll-container" ref={scrollRef}>
-          <nav className="toc-links">
-            {links.map((link) => (
-              <a
-                key={link.id}
-                href={`#${link.id}`}
-                className={`toc-link ${link.level === "h3" ? "toc-h3" : "toc-h2"}`}
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-        </div>
-      </div>
-    </aside>
-  );
+     <div className='copy-dropdown-container'>
+        <button className='copy-button-container' onClick={handleCopy}>
+        <Copy size={15} className='copy-icon'/>
+          <p className='copy-text-right'>      {copied ? "Copied!" : "Copy Page"}
+            </p>
+        </button>
+        <button className='dropdown-container' onClick={toggleModal}>
+                <ChevronDown size={15} className='copy-icon'/>
+        </button>
+ {showDropdown && (
+  <div className='dropdown-menu' onClick={(e) => e.stopPropagation()}>
+    <div className='each-item-dropdown' onClick={() => { handleCopy(); setShowDropdown(false); }}>
+      <Copy size={16} />
+      <span className='copy-text-dropdown'>Copy page</span>
+    </div>
+    <div className='each-item-dropdown' onClick={() => { window.open('https://documentation.ai/markdown', '_blank'); setShowDropdown(false); }}>
+      <ExternalLink size={16} />
+      <span className='copy-text-dropdown'>View as Markdown</span>
+      <ArrowUpRight size={16} className='arrow-icon' />
+    </div>
+    <div className='each-item-dropdown' onClick={() => { window.open('https://claude.ai/new', '_blank'); setShowDropdown(false); }}>
+      <img src="https://blob-cdn.documentation.ai/assets/icons/anthropic.svg?auto=format%2Ccompress&w=32&q=75" width="16" height="16" className='dropdown-img' alt="Claude" />
+      <span className='copy-text-dropdown'>Open in Claude</span>
+      <ArrowUpRight size={16} className='arrow-icon' />
+    </div>
+    <div className='each-item-dropdown' onClick={() => { window.open('https://chatgpt.com', '_blank'); setShowDropdown(false); }}>
+      <img src="https://blob-cdn.documentation.ai/assets/icons/openai.svg?auto=format%2Ccompress&w=32&q=75" width="16" height="16" className='dropdown-img' alt="ChatGPT" />
+      <span className='copy-text-dropdown'>Open in ChatGPT</span>
+      <ArrowUpRight size={16} className='arrow-icon' />
+    </div>
+    <div className='each-item-dropdown' onClick={() => { window.open('https://www.perplexity.ai', '_blank'); setShowDropdown(false); }}>
+      <img src="https://blob-cdn.documentation.ai/assets/icons/perplexity.svg?auto=format%2Ccompress&w=32&q=75" width="16" height="16" className='dropdown-img' alt="Perplexity" />
+      <span className='copy-text-dropdown'>Open in Perplexity</span>
+      <ArrowUpRight size={16} className='arrow-icon' />
+    </div>
+    <div className='each-item-dropdown' onClick={() => { window.open('https://grok.x.ai', '_blank'); setShowDropdown(false); }}>
+      <img src="https://blob-cdn.documentation.ai/assets/icons/grok.svg?auto=format%2Ccompress&w=32&q=75" width="16" height="16" className='dropdown-img' alt="Grok" />
+      <span className='copy-text-dropdown'>Open in Grok</span>
+      <ArrowUpRight size={16} className='arrow-icon' />
+    </div>
+    <div className='each-item-dropdown' onClick={() => { navigator.clipboard.writeText('https://mcp.documentation.ai/server'); toast("MCP URL copied"); setShowDropdown(false); }}>
+      <Server size={16} />
+      <span className='copy-text-dropdown'>Copy MCP server URL</span>
+    </div>
+  </div>
+)}
+     </div>
+     
+  <div className='toc-sidebar'>
+ {arr.map(item => (
+  <div
+    key={item.id}
+    className={`item-list-view ${item.id === active ? 'active' : ''}`}
+    style={{
+      paddingLeft: item.level === "h3" ? "36px" : "12px",
+    }}
+    onClick={() => {
+      setActive(item.id);
+      const el = document.getElementById(item.id);
+      if (el) {
+        el.scrollIntoView({ behavior: "instant", block: "start" });
+      }
+    }}
+  >
+    {item.label}
+  </div>
+))}
+</div>
+    </div>
+  )
 }
+
+export default TOCSidebar
