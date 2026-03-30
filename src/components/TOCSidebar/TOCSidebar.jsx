@@ -174,7 +174,7 @@ const toggleModal = () => {
      </div>
      
   <div className='toc-sidebar'>
- {arr.map(item => (
+ {arr?.map(item => (
   <div
     key={item.id}
     className={`item-list-view ${item.id === active ? 'active' : ''}`}

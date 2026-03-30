@@ -576,6 +576,7 @@ function Sidebar() {
 import { ToastContainer } from "react-toastify";
 import MermaidDiagrams from "./components/Mermaid/Mermaid";
 import ParamFieldPage from "./components/ParamField/ParamField";
+import Javeed from "./Context/Javeed";
 
 export default function App() {
   return (
@@ -599,6 +600,8 @@ export default function App() {
         <Sidebar />
         <ContentArea>
           <Routes>
+                        <Route path="" element={<Javeed />} />
+
             <Route path="/introduction" element={<Introduction />} />
             <Route path="/core-concepts" element={<CoreConcepts />} />
             <Route path="/quickstart" element={<Quickstart />} />
