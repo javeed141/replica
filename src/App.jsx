@@ -151,15 +151,20 @@ const GetStartedBtn = styled.button`
 //  SIDEBAR — styled components
 // ══════════════════════════════════════════════
 const SidebarWrapper = styled.aside`
-  width: 260px;
+  width: 300px;
   min-width: 260px;
   border-right: 1px solid var(--border);
-  padding: 24px 16px;
-  overflow-y: auto;
+  padding: 24px 36px;
+  overflow-y: scroll;
   scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  scrollbar-color: var(--scrollbar-color) transparent;
   flex-shrink: 0;
   background: var(--sidebar-bg);
+  &::after {
+    content: "";
+    display: block;
+    height: 1650px;  
+  }
 `;
 
 const SidebarSection = styled.div`
@@ -226,7 +231,7 @@ const ContentArea = styled.main`
   background-color: var(--bg);
   color: var(--text);
   min-width: 0;
-  scrollbar-width: none;
+  scrollbar-width:1.5;
   scrollbar-color: var(--border) transparent;
   scroll-padding-top: 20px;
 
@@ -282,6 +287,8 @@ const HeaderWrapper = styled.header`
   top: 0;
   background: var(--bg);
   z-index: 10;
+  padding-left:16px;
+  padding-right:36px;
 `;
 
 const HeaderTop = styled.div`
